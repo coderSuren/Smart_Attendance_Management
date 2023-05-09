@@ -1,20 +1,23 @@
 import './App.css';
 import React, { useState } from 'react';
-// import 
+import Admin from './components/dashboard/Admin'
 
 import Login from './components/login/Login';
 // import { Auth } from './components/login/Auth';
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-  const [role,setrole] = useState("");
+  const [role,setrole] = useState("admin");
   
-    if(!isLogin){
-      return (
-        <Login setIsLogin={setIsLogin} setrole={setrole}/>
-      )
-    }
-    else{
+  
+    // if(!isLogin){
+    //   return (
+    //     <Login setIsLogin={setIsLogin} setrole={setrole}/>
+    //   )
+    // }
+    // else
+    //setrole('admin');
+    {
       if (role == "faculty"){
         return(
           <>
@@ -22,37 +25,21 @@ function App() {
           </>
         )
       }
-      if (role == "student"){
+      else if (role == "student"){
         return(
           <>
           <h1>Login successful for student</h1>
           </>
         )
       }
-      if (role == "admin"){
+      else if (role == "admin"){
         return(
           <>
-          <h1>Login successful for admin</h1>
+          <Admin/>
           </>
         )
       }
-      // return(
-      //   <div>
-      //     if (role == "faculty"){
-      //       <h1>Login successful for faculty</h1>
-      //     }
-      //     else if (role==="student"){
-      //       <h1>Login successful for student</h1>
-      //     }
-      //     else if(role==="admin"){
-      //       <h1>Login successful for admin</h1>
-      //     }
-      //     else{
-      //       <h1>Login failed, invalid user role</h1>
-      //     }
-          
-      //   </div>
-      // )
+     
     }
 }
 export default App;
