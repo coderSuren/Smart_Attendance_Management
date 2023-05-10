@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
-import Admin from './components/dashboard/Admin'
+import Admin from './components/dashboard/Admin/Admin'
 
 import Login from './components/login/Login';
 // import { Auth } from './components/login/Auth';
