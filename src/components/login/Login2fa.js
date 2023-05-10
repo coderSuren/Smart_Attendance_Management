@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,11 +21,15 @@ const useStyles = makeStyles((theme) => ({
 export default function Login2fa({setIsLogin2,generatedcode}) {
   const classes = useStyles();
   const [code, setCode] = useState('');
+  const [codeerror,setcodeerror]=useState(true);
 
-  const handleCodeChange = (event) => {
-    setCode(event.target.value);
-  };
+//   const handleCodeChange = (event) => {
+//     setCode(event.target.value);
+//   };
 
+  function handleDialogClose(){
+    setcodeerror(false)
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     // Perform authentication or verification logic here
@@ -35,11 +40,15 @@ export default function Login2fa({setIsLogin2,generatedcode}) {
     if (String(generatedcode) === code){
         console.log("jslkdfj")
         setIsLogin2(true);
+        setcodeerror(false)
+    }else{
+        setcodeerror(true)
     }
     // setIsLogin2(true)
   };
 
   return (
+    <>
     <Container maxWidth="xs">
         
       <form className={classes.container} onSubmit={handleSubmit}>
@@ -69,6 +78,20 @@ export default function Login2fa({setIsLogin2,generatedcode}) {
         </Button>
       </form>
     </Container>
+    <Dialog open={codeerror} onClose={handleDialogClose}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Code does not match. Please try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
