@@ -1,35 +1,45 @@
 import './App.css';
 import React, { useState } from 'react';
 // import 
-
+import Faculty from './components/dashboard/Faculty'
+import Login2fa from './components/login/Login2fa';
 import Login from './components/login/Login';
 // import { Auth } from './components/login/Auth';
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
+  const [generatedcode,setgeneratedCode]=useState();
+  // const [enteredcode,setenteredCode]=useState();
   const [role,setrole] = useState("");
+  const [isLogin2, setIsLogin2] = useState(false);
   
     if(!isLogin){
       return (
-        <Login setIsLogin={setIsLogin} setrole={setrole}/>
+        <Login setIsLogin={setIsLogin} setrole={setrole} setgeneratedCode={setgeneratedCode}/>
+      )
+    }
+    if(!isLogin2){
+      return (
+        <Login2fa setIsLogin2={setIsLogin2} generatedcode={generatedcode} />
       )
     }
     else{
-      if (role == "faculty"){
+      if (role === "faculty"){
         return(
           <>
-          <h1>Login successful for faculty</h1>
+          {/* <h1>Login successful for faculty</h1> */}
+          <Faculty/>
           </>
         )
       }
-      if (role == "student"){
+      if (role === "student"){
         return(
           <>
           <h1>Login successful for student</h1>
           </>
         )
       }
-      if (role == "admin"){
+      if (role === "admin"){
         return(
           <>
           <h1>Login successful for admin</h1>
