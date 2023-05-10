@@ -16,7 +16,7 @@ import RenderDashboard from './RenderDashboard'
 const navbarPages = ['View Database', 'Create Entry', 'Query Database'];
 const viewDatabaseOptions = ['View Students', 'View Faculty', 'View Courses'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const createDatabaseEntryOptions = ['Create Student', 'Create Class', 'Create Faculty', 'Assign student to class'];
+const createDatabaseEntryOptions = ['Create Student', 'Create Course', 'Create Faculty', 'Create Class', 'Assign student to class'];
 const advancedOptions = ['Query Database'];
 
 var currentPage = navbarPages[0];
@@ -29,7 +29,7 @@ function Admin() {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" display="flex">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <Typography
@@ -52,7 +52,7 @@ function Admin() {
 
             <Box sx={{ flexGrow: 1, display: 'flex' }}>
 
-              <Button onClick={(event) => {setViewDatabaseSelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'block' }}>
+              <Button onClick={(event) => {setViewDatabaseSelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'flex' }}>
                 View Database
               </Button>
 
@@ -79,7 +79,7 @@ function Admin() {
                 ))}
               </Menu>
 
-              <Button onClick={(event) => {setCreateDatabaseEntrySelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'block' }}>
+              <Button onClick={(event) => {setCreateDatabaseEntrySelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'flex' }}>
                 Create new Entry
               </Button>
 
@@ -106,7 +106,7 @@ function Admin() {
                 ))}
               </Menu>
 
-              <Button onClick={(event) => {setDatabaseQuerySelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'block' }}>
+              <Button onClick={(event) => {setDatabaseQuerySelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'flex' }}>
                 Advanced Options
               </Button>
               <Menu
