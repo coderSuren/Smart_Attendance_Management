@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 // import 
-
+import Student from './components/dashboard/Student'
 import Login from './components/login/Login';
 // import { Auth } from './components/login/Auth';
 
@@ -24,9 +24,7 @@ function App() {
       }
       if (role == "student"){
         return(
-          <>
-          <h1>Login successful for student</h1>
-          </>
+          <Student />
         )
       }
       if (role == "admin"){
