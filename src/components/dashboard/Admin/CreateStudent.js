@@ -48,7 +48,7 @@ function CreateStudent() {
     const [passwordError, setPasswordError] = React.useState(false)
     const [section, setSection] = React.useState('');
     const [studentID, setStudentID] = React.useState('');
-    const [course, setCourse] = React.useState('Default');
+    const [specialization, setSpecialization] = React.useState('Default');
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -153,14 +153,14 @@ function CreateStudent() {
                         <Select
                             labelId="select-option-label"
                             id="select-option"
-                            defaultValue='Select Course'
-                            value={course}
+                            defaultValue='Select Specialization'
+                            value={specialization}
                             fullWidth
-                            onChange={setCourse}
-                            label="Select Course"
+                            onChange={setSpecialization}
+                            label="Select Specialization"
                         >
                             <MenuItem value="Default">
-                                <em>Select Course</em>
+                                <em>Select Specialization</em>
                             </MenuItem>
                             <MenuItem value="option1">CSE</MenuItem>
                             <MenuItem value="option2">MEE</MenuItem>
