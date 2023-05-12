@@ -37,7 +37,6 @@ function CreateClass() {
   const [emailError, setEmailError] = React.useState(false)
   const [password, setPassword] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false)
-  const [section, setSection] = React.useState('');
   const [courseCode, setCourseCode] = React.useState('');
   const [assignedTeacherID, setAssignedTeacherID] = React.useState('');
 
@@ -76,17 +75,6 @@ function CreateClass() {
               type="courseCode"
 
               value={courseCode}
-            />
-            <Box sx={{ marginTop: '10px' }} />
-            <TextField
-              label="Section"
-              onChange={e => setSection(e.target.value)}
-              required
-              variant="outlined"
-              fullWidth
-              color="secondary"
-              type="section"
-              value={section}
             />
             <Box sx={{ marginTop: '10px' }} />
             <TextField

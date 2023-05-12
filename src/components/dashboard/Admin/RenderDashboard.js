@@ -8,12 +8,13 @@ import CreateCourse from './CreateCourse';
 import CreateFaculty from './CreateFaculty';
 import QueryDatabase from './QueryDatabase';
 import CreateClass from './CreateClass';
+import CreateAdmin from './CreateAdmin';
 import AssignStudentToClass from './AssignStudentToClass';
 
 // For reference. Already defined in Admin.js.
 // const viewDatabaseOptions = ['View Students', 'View Faculty', 'View Courses'];
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-// const createDatabaseEntryOptions = ['Create Student', 'Create Class', 'Create Faculty', 'Assign student to class'];
+// const createDatabaseEntryOptions = ['Create Student', 'Create Class', 'Create Faculty', 'Create Admin', 'Assign student to class'];
 
 function RenderDashboard(currentPage) {
 
@@ -77,6 +78,11 @@ function RenderDashboard(currentPage) {
   else if (currentPage.currentPage === "Assign student to class") {
     return <>
       <AssignStudentToClass />
+    </>
+  }
+  else if (currentPage.currentPage === "Create Admin") {
+    return <>
+      <CreateAdmin/>
     </>
   }
 }
