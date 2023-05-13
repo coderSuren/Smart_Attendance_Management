@@ -49,6 +49,7 @@ function CreateStudent() {
     const [section, setSection] = React.useState('');
     const [studentID, setStudentID] = React.useState('');
     const [specialization, setSpecialization] = React.useState('Default');
+    const [semester, setSemester] = React.useState('Default');
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -139,24 +140,56 @@ function CreateStudent() {
 
                     />
                     <Box sx={{ marginTop: '10px' }} />
-                    <Stack spacing={2} direction="row">
-                        <TextField
-                            label="Section"
-                            onChange={e => setSection(e.target.value)}
-                            required
-                            variant="outlined"
-                            color="secondary"
-                            type="section"
+                    <Stack spacing={3} direction="row">
+                    <Select
+                            labelId="select-option-label"
+                            id="select-option"
+                            defaultValue='Select Section'
                             value={section}
                             fullWidth
-                        />
+                            onChange={(event) => {setSection(event.target.value);}}
+                            label="Select Section"
+                        >
+                            <MenuItem value="Default">
+                                <em>Select Semester</em>
+                            </MenuItem>
+                            <MenuItem value="option1">'A'</MenuItem>
+                            <MenuItem value="option2">'B'</MenuItem>
+                            <MenuItem value="option3">'C'</MenuItem>
+                            <MenuItem value="option4">'D'</MenuItem>
+                            <MenuItem value="option5">'E'</MenuItem>
+                            <MenuItem value="option6">'F'</MenuItem>
+                            <MenuItem value="option7">'G'</MenuItem>
+                            <MenuItem value="option8">'H'</MenuItem>
+                        </Select>
+                                                <Select
+                            labelId="select-option-label"
+                            id="select-option"
+                            defaultValue='Select Semester'
+                            value={semester}
+                            fullWidth
+                            onChange={(event) => {setSemester(event.target.value);}}
+                            label="Select Semester"
+                        >
+                            <MenuItem value="Default">
+                                <em>Select Semester</em>
+                            </MenuItem>
+                            <MenuItem value="option1">1</MenuItem>
+                            <MenuItem value="option2">2</MenuItem>
+                            <MenuItem value="option3">3</MenuItem>
+                            <MenuItem value="option4">4</MenuItem>
+                            <MenuItem value="option5">5</MenuItem>
+                            <MenuItem value="option6">6</MenuItem>
+                            <MenuItem value="option7">7</MenuItem>
+                            <MenuItem value="option8">8</MenuItem>
+                        </Select>
                         <Select
                             labelId="select-option-label"
                             id="select-option"
                             defaultValue='Select Specialization'
                             value={specialization}
                             fullWidth
-                            onChange={setSpecialization}
+                            onChange={(event) => {setSpecialization(event.target.value);}}
                             label="Select Specialization"
                         >
                             <MenuItem value="Default">

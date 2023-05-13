@@ -151,7 +151,7 @@ function CreateFaculty() {
                         defaultValue='Select Course'
                         value={teacherRole}
                         fullWidth
-                        onChange={setTeacherRole}
+                        onChange={(event) => {setTeacherRole(event.target.value);}}
                         label="Select Role"
                     >
                         <MenuItem value="Default">
