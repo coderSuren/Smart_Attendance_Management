@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // import 
 import Faculty from './components/dashboard/Faculty'
 import Login2fa from './components/login/Login2fa';
+import Student from './components/dashboard/Student'
 import Login from './components/login/Login';
 // import { Auth } from './components/login/Auth';
 
@@ -36,11 +37,7 @@ function App() {
       else if (role === "student"){
         console.log("jhif")
         return(
-          <>
-          <h1>Login successful for student</h1>
-          krkekd
-          {/* <h1>fjwfjwjfk</h1> */}
-          </>
+          <Student />
         )
       }
       else if (role === "admin"){
