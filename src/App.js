@@ -12,7 +12,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [generatedcode,setgeneratedCode]=useState();
   // const [enteredcode,setenteredCode]=useState();
-  const [role,setrole] = useState("admin");
+  const [role,setrole] = useState("");
   const [isLogin2, setIsLogin2] = useState(false);
   
     if(!isLogin){
