@@ -31,14 +31,14 @@ function Admin() {
     <>
       <AppBar position="static" display="flex">
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
             <Typography
               variant="h6"
               noWrap
               component="a"
               href="/"
               sx={{
-                mr: 2,
+                mr: -80,
                 display: { xs: 'none', md: 'flex' },
                 fontFamily: 'monospace',
                 fontWeight: 700,
@@ -62,12 +62,12 @@ function Admin() {
                 anchorEl={isViewDatabaseSelected}
                 anchorOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 open={Boolean(isViewDatabaseSelected)}
                 onClose={(option) => {currentPage = option; console.log(option); setViewDatabaseSelected(null); }}
@@ -89,12 +89,12 @@ function Admin() {
                 anchorEl={isCreateDatabaseEntrySelected}
                 anchorOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 open={Boolean(isCreateDatabaseEntrySelected)}
                 onClose={(option) => {currentPage = option; console.log(option); setCreateDatabaseEntrySelected(null);}}
@@ -115,12 +115,12 @@ function Admin() {
                 anchorEl={isDatabaseQuerySelected}
                 anchorOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 open={Boolean(isDatabaseQuerySelected)}
                 onClose={() => {setDatabaseQuerySelected(false);}}
@@ -145,12 +145,12 @@ function Admin() {
                 anchorEl={isUserProfileIconSelected}
                 anchorOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: 'top',
-                  horizontal: 'right',
+                  horizontal: 'left',
                 }}
                 open={Boolean(isUserProfileIconSelected)}
                 onClose={() => {setUserProfileIconSelected(false);}}

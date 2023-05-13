@@ -5,13 +5,14 @@ import Faculty from './components/dashboard/Faculty'
 import Login2fa from './components/login/Login2fa';
 import Student from './components/dashboard/Student'
 import Login from './components/login/Login';
+import Admin from './components/dashboard/Admin/Admin';
 // import { Auth } from './components/login/Auth';
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [generatedcode,setgeneratedCode]=useState();
   // const [enteredcode,setenteredCode]=useState();
-  const [role,setrole] = useState("");
+  const [role,setrole] = useState("admin");
   const [isLogin2, setIsLogin2] = useState(false);
   
     if(!isLogin){
@@ -25,6 +26,7 @@ function App() {
       )
     }
     else{
+      console.log(role)
       if (role === "faculty"){
         return(
           <>
@@ -33,17 +35,17 @@ function App() {
           </>
         )
       }
-      if (role === "student"){
+      else if (role === "student"){
+        console.log("jhif")
         return(
           <Student />
         )
       }
-      if (role === "admin"){
-        return(
-          <>
-          <h1>Login successful for admin</h1>
+      else if (role === "admin"){
+        return <>
+          <Admin/>
           </>
-        )
+        
       }
       // return(
       //   <div>
