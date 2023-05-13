@@ -1,23 +1,6 @@
-// import React from 'react'
-
-// function Login() {
-//   return (
-//     <div>
-//         <div>
-//             <form action=''>
-//                 <div>
-//                     <label></label>
-//                 </div>
-//             </form>
-//         </div>
-//     </div>
-//   )
-// }
-
-// export default Login
-
 import React, { useState } from 'react';
 import { Snackbar, Alert } from "@mui/material";
+import Background from './Background';
 import {
   Container,
   Avatar,
@@ -27,7 +10,10 @@ import {
   Link,
   Grid,
   makeStyles,
+  Chip
 } from '@material-ui/core';
+import styled from 'styled-components';
+import { SigninContainer ,H3} from './Loginstyles';
 // import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,6 +60,7 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
   
     // Define mysql localhost url
     const URL = 'http://localhost:5000/login';
+    // const URL = 'https://3348-2401-4900-4d44-db6a-e836-2078-6ba9-ac40.ngrok-free.app/';
     // http://localhost:5000/
     console.log("rhfg");
     console.log(loginRequestOptions)
@@ -102,16 +89,43 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
       showError();
     }
   };
+
+  const hideError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setisLoginFailed(null);
+  };
+
   
   return (
+    // <div style={{alignItems:"center",justifyContent:"center",width:"100%"}}>
+    <>
+    <Background/>
+    <SigninContainer>
+      
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          {/* <LockOutlinedIcon /> */}
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
+        {/* <H3>Smart Attendance</H3> */}
+        {/* <marquee style={{width:"100%"}}>Smart Attendance</marquee> */}
+
+        <Typography component="h1" variant="h3" style={{ color: 'white',paddingBottom:"2rem"}}>
+              Smart Attendance
         </Typography>
+        {/* <Chip label="Sign In" style={{ fontSize: '1.5rem', padding: '1.5rem' }}/> */}
+        <Chip
+  label="Sign In"
+  style={{
+    fontSize: '1.5rem',
+    padding: '1.5rem',
+    // backgroundColor: '#3f51b5', // Set a contrasting color here
+    color: '#000',  // Set a contrasting color here
+  }}
+/>
+        {/* <Typography component="h1" variant="h3" style={{ color: 'white' }}>
+              Sign in
+        </Typography> */}
+        
         <form className={classes.form} noValidate>
             {/* <TextField
               variant="outlined"
@@ -135,7 +149,9 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
             label="Email address"
             type="email"
             id="email"
+
             value={email}
+            style={{color:"white"}}
             onChange={(e) => setEmail(e.target.value)}
             autoFocus
           />
@@ -176,18 +192,22 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
           </Grid>
           
         </form>
-
+        
         <Snackbar
         open={isLoginFailed}
         autoHideDuration={6000}
-        // onClose={hideError}
-      >
+        onClose={hideError}
+        >
         <Alert  severity="error" sx={{ width: "100%" }}>
           Login Error! Please Try again!
         </Alert>
       </Snackbar>
       </div>
     </Container>
+    </SigninContainer>
+    
+    </>
     );
   } 
   export default Login;
+

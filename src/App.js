@@ -25,6 +25,7 @@ function App() {
       )
     }
     else{
+      console.log(role)
       if (role === "faculty"){
         return(
           <>
@@ -33,12 +34,13 @@ function App() {
           </>
         )
       }
-      if (role === "student"){
+      else if (role === "student"){
+        console.log("jhif")
         return(
           <Student />
         )
       }
-      if (role === "admin"){
+      else if (role === "admin"){
         return(
           <>
           <h1>Login successful for admin</h1>
