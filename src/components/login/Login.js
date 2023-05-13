@@ -50,7 +50,7 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
     setisLoginFailed(true);
   };
   const loginUser = async () => {
-    const loginQuery = `select role, password,email from authentication where email = '${email}'`;
+    const loginQuery = `select role, password,email from Authentication where email = '${email}'`;
     const loginRequestOptions = {
       method: 'POST',
       headers: {
