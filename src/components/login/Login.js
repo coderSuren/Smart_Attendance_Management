@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({setIsLogin,setrole}) => {
+const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -61,13 +61,14 @@ const Login = ({setIsLogin,setrole}) => {
     setisLoginFailed(true);
   };
   const loginUser = async () => {
-    const loginQuery = `select role, password from authentication where email = '${email}'`;
+    const loginQuery = `select role, password,email from authentication where email = '${email}'`;
     const loginRequestOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query: loginQuery }),
+      body: JSON.stringify({ query: loginQuery ,
+      password:password}),
       // mode: 'cors',
     };
   
@@ -85,10 +86,11 @@ const Login = ({setIsLogin,setrole}) => {
       // } else {
       //   showError();
       // }
-      if (data[0]){
+      if (data[1].success){
         setIsLogin(true);
         console.log(data[0].role)
         setrole(data[0].role)
+        setgeneratedCode(data[2].code)
         
         
       }
@@ -111,15 +113,28 @@ const Login = ({setIsLogin,setrole}) => {
           Sign in
         </Typography>
         <form className={classes.form} noValidate>
+            {/* <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoFocus
+            /> */}
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
             name="email"
-            autoComplete="email"
+            label="Email address"
+            type="email"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoFocus
