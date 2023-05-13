@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Snackbar, Alert } from "@mui/material";
 import Background from './Background';
+import Forgot from './Forgot';
 import {
   Container,
   Avatar,
@@ -36,11 +37,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [forgot,isForgot] = useState(false);
   const [isLoginFailed, setisLoginFailed] = useState(null);
 
   const showError = () => {
@@ -97,10 +100,20 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
     setisLoginFailed(null);
   };
 
-  
+  const handleForgot = ()=>{
+    console.log("Hello")
+    isForgot(true);
+  }
+  if (forgot){
+    return (
+      <Forgot/>
+    )
+  }
+  else{
   return (
     // <div style={{alignItems:"center",justifyContent:"center",width:"100%"}}>
-    <>
+    <>{
+    }
     <Background/>
     <SigninContainer>
       
@@ -180,9 +193,10 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" onClick={handleForgot}>
                 Forgot password?
               </Link>
+
             </Grid>
             <Grid item>
               {/* <Link href="#" variant="body2"> */}
@@ -208,6 +222,7 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
     
     </>
     );
+  }
   } 
   export default Login;
 

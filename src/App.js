@@ -5,6 +5,7 @@ import Faculty from './components/dashboard/Faculty'
 import Login2fa from './components/login/Login2fa';
 import Student from './components/dashboard/Student'
 import Login from './components/login/Login';
+import Admin from './components/dashboard/Admin/Admin';
 // import { Auth } from './components/login/Auth';
 
 function App() {
@@ -41,11 +42,10 @@ function App() {
         )
       }
       else if (role === "admin"){
-        return(
-          <>
-          <h1>Login successful for admin</h1>
+        return <>
+          <Admin/>
           </>
-        )
+        
       }
       // return(
       //   <div>
