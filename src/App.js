@@ -1,45 +1,67 @@
 import './App.css';
 import React, { useState } from 'react';
-import Admin from './components/dashboard/Admin/Admin'
-
+// import 
+import Faculty from './components/dashboard/Faculty'
+import Login2fa from './components/login/Login2fa';
+import Student from './components/dashboard/Student'
 import Login from './components/login/Login';
 // import { Auth } from './components/login/Auth';
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-  const [role,setrole] = useState("admin");
+  const [generatedcode,setgeneratedCode]=useState();
+  // const [enteredcode,setenteredCode]=useState();
+  const [role,setrole] = useState("");
+  const [isLogin2, setIsLogin2] = useState(false);
   
-  
-    // if(!isLogin){
-    //   return (
-    //     <Login setIsLogin={setIsLogin} setrole={setrole}/>
-    //   )
-    // }
-    // else
-    //setrole('admin');
-    {
-      if (role == "faculty"){
+    if(!isLogin){
+      return (
+        <Login setIsLogin={setIsLogin} setrole={setrole} setgeneratedCode={setgeneratedCode}/>
+      )
+    }
+    if(!isLogin2){
+      return (
+        <Login2fa setIsLogin2={setIsLogin2} generatedcode={generatedcode} />
+      )
+    }
+    else{
+      if (role === "faculty"){
         return(
           <>
-          <h1>Login successful for faculty</h1>
+          {/* <h1>Login successful for faculty</h1> */}
+          <Faculty/>
           </>
         )
       }
-      else if (role == "student"){
+      if (role === "student"){
+        return(
+          <Student />
+        )
+      }
+      if (role === "admin"){
         return(
           <>
-          <h1>Login successful for student</h1>
+          <h1>Login successful for admin</h1>
           </>
         )
       }
-      else if (role == "admin"){
-        return(
-          <>
-          <Admin/>
-          </>
-        )
-      }
-     
+      // return(
+      //   <div>
+      //     if (role == "faculty"){
+      //       <h1>Login successful for faculty</h1>
+      //     }
+      //     else if (role==="student"){
+      //       <h1>Login successful for student</h1>
+      //     }
+      //     else if(role==="admin"){
+      //       <h1>Login successful for admin</h1>
+      //     }
+      //     else{
+      //       <h1>Login failed, invalid user role</h1>
+      //     }
+          
+      //   </div>
+      // )
     }
 }
 export default App;
