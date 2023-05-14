@@ -1,0 +1,44 @@
+.popup-content {
+    margin: auto;
+    background: rgb(255, 255, 255);
+    width: 50%;
+    padding: 5px;
+  }
+  .popup-arrow {
+    color: rgb(255, 255, 255);
+  }
+  [role='tooltip'].popup-content {
+    width: 200px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
+  }
+  
+  .popup-overlay {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  [data-popup='tooltip'].popup-overlay {
+    background: transparent;
+  }
+/* 
+.map-button {
+    -webkit-border-radius: 10;
+    -moz-border-radius: 10;
+    border-radius: 10px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    background: #1976d2;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    border-color: none;
+    left: 50%;
+  }
+ 
+.map-button:hover {
+    background: #1565c0;
+    text-decoration: none;
+  } */
+
+.Popup{
+  float: right;
+  margin: 5px;
+}

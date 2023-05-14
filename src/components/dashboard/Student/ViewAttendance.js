@@ -24,6 +24,7 @@ import Calender from './Calender'
 import Data from './Data'
 import { makeStyles } from "@material-ui/core/styles";
 import Date from "./Datepicker"
+import Popup from './Popup'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,107 +51,84 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-const Student = ({}) => {
-  const classes = useStyles();
+const Attendance =() =>
+{
+    const classes = useStyles();
   
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [courseId, setCourseId] = useState("");
-  const [facultyId, setFacultyId] = useState("");
-  const [attendanceData, setAttendanceData] = useState([]);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [courseId, setCourseId] = useState("");
+    const [facultyId, setFacultyId] = useState("");
+    const [attendanceData, setAttendanceData] = useState([]);
 
-  const handleStartDateChange = (event) => {
-    setStartDate(event.target.value);
-  };
-
-  const handleEndDateChange = (event) => {
-    setEndDate(event.target.value);
-  };
-
-  const handleCourseIdChange = (event) => {
-    setCourseId(event.target.value);
-  };
-
-  const handleFacultyIdChange = (event) => {
-    setFacultyId(event.target.value);
-  };
-
-  const fetchData =  async () => {
-    const loginQuery = `SELECT * FROM Attendance WHERE courseid = ${courseId} AND facultyid = ${facultyId} AND date >= ${startDate} AND date <= ${endDate}`;
-    const loginRequestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query: loginQuery}),
-      // mode: 'cors',
+    const handleStartDateChange = (event) => {
+        setStartDate(event.target.value);
     };
-  
-    // Define mysql localhost url
-    const URL = 'http://localhost:5000/attendance';
-    console.log(loginRequestOptions)
-    try {
-      const resp = await fetch(URL, loginRequestOptions);
-      const data = await resp.json();
-      console.log(data);
-      // if (data.success) {
-      //   // Handle successful response
-      // } else {
-      //   showError();
-      // }
-      if (data[1].success){
-        console.log(data)        
-      }
-      else{
+
+    const handleEndDateChange = (event) => {
+        setEndDate(event.target.value);
+    };
+
+    const handleCourseIdChange = (event) => {
+        setCourseId(event.target.value);
+    };
+
+    const handleFacultyIdChange = (event) => {
+        setFacultyId(event.target.value);
+    };
+
+    const fetchData =  async () => {
+        const loginQuery = `SELECT * FROM Attendance WHERE courseid = ${courseId} AND facultyid = ${facultyId} AND date >= ${startDate} AND date <= ${endDate}`;
+        const loginRequestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: loginQuery}),
+        // mode: 'cors',
+        };
+    
+        // Define mysql localhost url
+        const URL = 'http://localhost:5000/attendance';
+        console.log(loginRequestOptions)
+        try {
+        const resp = await fetch(URL, loginRequestOptions);
+        const data = await resp.json();
+        console.log(data);
+        // if (data.success) {
+        //   // Handle successful response
+        // } else {
+        //   showError();
+        // }
+        if (data[1].success){
+            console.log(data)        
+        }
+        else{
+            // showError();
+            // setIsLogin(true);
+        }
+        } catch (e) {
         // showError();
-        // setIsLogin(true);
-      }
-    } catch (e) {
-      // showError();
-    }
-  };
+        }
+    };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []); // Fetch data on component mount
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const res = await fetch(
-  //     `http://localhost:5000/attendance?course_id=${course_id}&faculty_id=${faculty_id}&start_date=${start_date}&end_date=${end_date}`
-  //   );
-  //   const data = await res.json();
-  //   setAttendance(data);
-  // };
-  // const columns = ["Column 1", "Column 2", "Column 3"];
+    // useEffect(() => {
+    //   fetchData();
+    // }, []); // Fetch data on component mount
+    // const handleSubmit = async (e) => {
+    //   e.preventDefault();
+    //   const res = await fetch(
+    //     `http://localhost:5000/attendance?course_id=${course_id}&faculty_id=${faculty_id}&start_date=${start_date}&end_date=${end_date}`
+    //   );
+    //   const data = await res.json();
+    //   setAttendance(data);
+    // };
+    // const columns = ["Column 1", "Column 2", "Column 3"];
+
+
     return (
-        <>       
-        <AppBar position="static">
-        <Container maxWidth="xl" type="flex">
-        <Toolbar disableGutters>
-            <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.0rem',
-                color: 'inherit',
-                textDecoration: 'none',
-            }}
-            >
-            Smart Attendance System
-            </Typography>
-
-            
-        </Toolbar>
-        </Container>
-        </AppBar>
         <div className={classes.root}>
-        <form>
+        <Popup />
         <FormControl className={classes.formControl} sx={{m:1,minWidth: 120,}}>
           <InputLabel id="course_id_label">Course ID</InputLabel>
           <Select
@@ -214,28 +192,30 @@ const Student = ({}) => {
           </Select>
         </FormControl> */}
  
-        <Button
+        
+    
+      <Date label="Enter Start Date"/>
+      <Date label="Enter End Date" /> <br />
+      <Button
           className={classes.submitButton}
           variant="contained"
           color="primary"
           type="submit"
+          sx={{m:1,minWidth: 120,}}
           // onSubmit={}
         >
           Submit
-        </Button>
-      </form>
-      <Date /><Date />
-        <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+       </Button><br /> <br/>
+        <Grid container spacing={2}>
+        <Grid item xs={12} md={8}>
             <Table data={Data} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
             <Calender />
         </Grid>
         </Grid>
         </div> 
-        </>
     );
-} 
+}
 
-export default Student;
+export default Attendance;

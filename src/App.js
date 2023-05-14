@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // import 
 import Faculty from './components/dashboard/Faculty'
 import Login2fa from './components/login/Login2fa';
-import Student from './components/dashboard/Student'
+import Student from './components/dashboard/Student/Student'
 import Login from './components/login/Login';
 // import { Auth } from './components/login/Auth';
 
