@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container } from '@material-ui/core';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { TextField, Button, Typography, Container } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { SigninContainer } from './Loginstyles';
 import Background from './Background';
-const useStyles = makeStyles((theme) => ({
-  container: {
-    marginTop: theme.spacing(4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  textField: {
-    marginBottom: theme.spacing(2),
-  },
-  button: {
-    marginTop: theme.spacing(2),
-  },
-}));
+import styled from 'styled-components';
+const FormContainer = styled('div')({
+  marginTop: '4rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
+
+const StyledTextField = styled(TextField)({
+  marginBottom: '2rem',
+});
+
+const StyledButton = styled(Button)({
+  marginTop: '2rem',
+});
+
 
 export default function Login2fa({setIsLogin2,generatedcode}) {
-  const classes = useStyles();
   const [code, setCode] = useState('');
   const [codeerror,setcodeerror]=useState(false);
 
@@ -47,58 +47,49 @@ export default function Login2fa({setIsLogin2,generatedcode}) {
     }
     // setIsLogin2(true)
   };
-
   return (
     <>
-    <Background/>
-    <SigninContainer>
-      <Container style={{backgroundcolor:"white"}}>
-    <Container maxWidth="xs" style={{backgroundcolor:"white"}}>
-        
-      <form className={classes.container} onSubmit={handleSubmit}>
-      <Typography variant="h5" component="h2" gutterBottom>
-          Second Step Authentication
-        </Typography>
-      <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="code"
-            label="code"
-            type="code"
-            id="code"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            autoComplete="current-password"
-          />
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          className={classes.button}
-        >
-          Verify
-        </Button>
-      </form>
-    </Container>
-    <Dialog open={codeerror} onClose={handleDialogClose}>
-        <DialogTitle>Error</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Code does not match. Please try again.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-      </Container>
+      <Background />
+      <SigninContainer>
+        <Container>
+          <FormContainer>
+            <Typography variant="h5" component="h2" gutterBottom>
+              Second Step Authentication
+            </Typography>
+            <form onSubmit={handleSubmit}>
+              <StyledTextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="code"
+                label="Code"
+                type="text"
+                id="code"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                autoComplete="off"
+              />
+              <StyledButton type="submit" variant="contained" color="primary">
+                Verify
+              </StyledButton>
+            </form>
+          </FormContainer>
+          <Dialog open={codeerror} onClose={handleDialogClose} minWidth="300px">
+            <DialogTitle>Error</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Code does not match. Please try again.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogClose} color="primary">
+                OK
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Container>
       </SigninContainer>
     </>
   );
 }
-
-// export default SecondStepAuthenticationPage;

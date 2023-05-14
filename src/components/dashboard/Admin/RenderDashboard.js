@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { makeStyles } from '@material-ui/core'
+import { styled } from '@mui/system';
 
 import CreateStudent from './CreateStudent';
 import CreateCourse from './CreateCourse';
@@ -16,74 +16,52 @@ import AssignStudentToClass from './AssignStudentToClass';
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 // const createDatabaseEntryOptions = ['Create Student', 'Create Class', 'Create Faculty', 'Create Admin', 'Assign student to class'];
 
-function RenderDashboard(currentPage) {
+const MainBox = styled(Box)(({ theme }) => ({
+  p: theme.spacing(3),
+}));
 
+function RenderDashboard(currentPage) {
   console.log(currentPage.currentPage);
+
   if (currentPage.currentPage === "View Students") {
-    return <>
-      <Box component="main" sx={{ p: 3 }}>
+    return (
+      <MainBox>
         <Typography>
           View Students
         </Typography>
-      </Box>
-    </>
-  }
-  else if (currentPage.currentPage === "View Faculty") {
-    return <>
-      <Box component="main" sx={{ p: 3 }}>
+      </MainBox>
+    );
+  } else if (currentPage.currentPage === "View Faculty") {
+    return (
+      <MainBox>
         <Typography>
           View Faculty
         </Typography>
-      </Box>
-    </>
-  }
-
-  else if (currentPage.currentPage === "View Courses") {
-    return <>
-      <Box component="main" sx={{ p: 3 }}>
+      </MainBox>
+    );
+  } else if (currentPage.currentPage === "View Courses") {
+    return (
+      <MainBox>
         <Typography>
           View Courses
         </Typography>
-      </Box>
-    </>
-  }
-  else if (currentPage.currentPage === "Query Database") {
-    return <>
-      <QueryDatabase />
-    </>
-  }
-
-  else if (currentPage.currentPage === "Create Student") {
-    return <>
-      <CreateStudent />
-    </>
-  }
-  else if (currentPage.currentPage === "Create Course") {
-    return <>
-      <CreateCourse />
-    </>
-  }
-  else if (currentPage.currentPage === "Create Faculty") {
-
-    return <>
-      <CreateFaculty />
-    </>
-  }
-
-  else if (currentPage.currentPage === "Create Class") {
-    return <>
-      <CreateClass />
-    </>
-  }
-  else if (currentPage.currentPage === "Assign student to class") {
-    return <>
-      <AssignStudentToClass />
-    </>
-  }
-  else if (currentPage.currentPage === "Create Admin") {
-    return <>
-      <CreateAdmin/>
-    </>
+      </MainBox>
+    );
+  } else if (currentPage.currentPage === "Query Database") {
+    return <QueryDatabase />;
+  } else if (currentPage.currentPage === "Create Student") {
+    return <CreateStudent />;
+  } else if (currentPage.currentPage === "Create Course") {
+    return <CreateCourse />;
+  } else if (currentPage.currentPage === "Create Faculty") {
+    return <CreateFaculty />;
+  } else if (currentPage.currentPage === "Create Class") {
+    return <CreateClass />;
+  } else if (currentPage.currentPage === "Assign student to class") {
+    return <AssignStudentToClass />;
+  } else if (currentPage.currentPage === "Create Admin") {
+    return <CreateAdmin />;
   }
 }
+
 export default RenderDashboard;

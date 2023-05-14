@@ -7,7 +7,7 @@ import {
     TableHead, 
     TableRow, 
     Paper 
-} from "@material-ui/core";
+} from "@mui/material";
 // import { makeStyles } from "@material-ui/core/styles";
 // import axios from "axios";
 

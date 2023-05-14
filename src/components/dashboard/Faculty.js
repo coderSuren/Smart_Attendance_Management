@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/system';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -13,50 +13,54 @@ import {
   TextField,
   Toolbar,
   Typography,
-  Grid
-} from '@material-ui/core';
+  Grid,
+} from '@mui/material';
 
 const localizer = momentLocalizer(moment);
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh'
-  },
-  appBar: {
-    display: 'flex',
-    width: '100%',
-  },
-  appBar1: {
-    display: 'flex',
-    width: '80%',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  captcha: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: theme.spacing(2)
-  },
-  captchaLabel: {
-    marginRight: theme.spacing(2)
-  },
-  captchaText: {
-    fontWeight: 'bold',
-    marginLeft: theme.spacing(2)
-  },
-  button: {
-    marginTop: theme.spacing(2)
-  }
+const ContainerWrapper = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+});
+
+const StylizedAppBar = styled('AppBar')({
+  display: 'flex',
+  width: '100%',
+});
+
+const StylizedAppBar1 = styled('AppBar')({
+  display: 'flex',
+  width: '80%',
+});
+
+const Form = styled('form')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
+
+const CaptchaContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: theme.spacing(2),
+}));
+
+const CaptchaLabel = styled('Typography')(({ theme }) => ({
+  marginRight: theme.spacing(2),
+}));
+
+const CaptchaText = styled('Typography')(({ theme }) => ({
+  fontWeight: 'bold',
+  marginLeft: theme.spacing(2),
+}));
+
+const StyledButton = styled('Button')(({ theme }) => ({
+  marginTop: theme.spacing(2)
 }));
 
 function Faculty() {
-  const classes = useStyles();
   const [captcha, setCaptcha] = useState('');
   const [code, setCode] = useState('');
   const [codeDisplay, setCodeDisplay] = useState('No code generated yet');
@@ -150,7 +154,7 @@ function Faculty() {
         <div>
       <AppBar position="static">
   <Toolbar style={{ justifyContent: "space-between" }}>
-    <Typography variant="h6" className={classes.title}>
+    <Typography variant="h6">
       SMART ATTENDANCE SYSTEM
     </Typography>
     <div>
@@ -160,18 +164,18 @@ function Faculty() {
     </div>
   </Toolbar>
 </AppBar>
-<div className={classes.container} style={{ display: "flex", height: "85vh" }}>
+<ContainerWrapper style={{ display: "flex", height: "85vh" }}>
   
-  <form className={classes.form} style={{ flex: 4.5 }} alignItems="center">
-    <AppBar position="static" className={classes.appBar1} >
+  <Form  style={{ flex: 4.5 }} alignItems="center">
+    <StylizedAppBar1 position="static">
       <Toolbar>
         <Typography variant="h6">Code Generator</Typography>
       </Toolbar>
-    </AppBar>
+    </StylizedAppBar1>
 <div>
   <Grid container spacing={2} alignItems="center">
     <Grid item>
-      <Typography className={classes.captchaLabel}>Select Subject:</Typography>
+      <CaptchaLabel>Select Subject:</CaptchaLabel>
     </Grid><Grid item><FormControl>
     <InputLabel id="Subject">Subject</InputLabel>
     <Select labelId="Subject" id="subject" value={subject} onChange={(e)=>setsubject(e.target.value)} style={{ width: '200px' }}>
@@ -184,7 +188,7 @@ function Faculty() {
   <div>
   <Grid container spacing={2} alignItems="center">
   <Grid item>
-      <Typography className={classes.captchaLabel}>Select Timeslot:</Typography>
+      <CaptchaLabel>Select Timeslot:</CaptchaLabel>
     </Grid>
     <Grid item>
   <FormControl>
@@ -198,37 +202,37 @@ function Faculty() {
   </FormControl></Grid></Grid>
   </div>
   <br></br><br></br>
-  <div className={classes.captcha}> 
+  <CaptchaContainer> 
   <Grid container justifyContent="center">
     <Button onClick={generateCaptcha} variant="outlined">Generate Captcha</Button>
   </Grid>
   <Grid container justifyContent="center">
-    <Typography id="captchaDisplay" className={classes.captchaText}>{captcha}</Typography>
+    <CaptchaText id="captchaDisplay">{captcha}</CaptchaText>
   </Grid>
-  </div>
-  <div className={classes.captcha}>
+  </CaptchaContainer>
+  <CaptchaContainer>
 
   <Grid container spacing={2} alignItems="center">
     <Grid item>
-      <Typography className={classes.captchaLabel}>Enter Captcha:</Typography>
+      <CaptchaLabel>Enter Captcha:</CaptchaLabel>
     </Grid>
     <Grid item>
       <TextField id="captcha" label="Captcha"  required value={enteredcaptcha}  onChange={(e)=>{handleFormChange();setenteredcaptcha(e.target.value)}} />
     </Grid>
   </Grid>
-</div>
-  <Button className={classes.button} onClick={generateCode} variant="contained" color="primary" disabled={!isFormValid}>Generate Code</Button><br></br>
+</CaptchaContainer>
+  <StyledButton onClick={generateCode} variant="contained" color="primary" disabled={!isFormValid}>Generate Code</StyledButton><br></br>
   <div className="code-display">
         <h2>Generated Code:</h2>
         <p>{codeDisplay}</p>
-      </div>  </form>
+      </div>  </Form>
   
   <div style={{ flex: 5.5 }}>
-    <AppBar style={{ position: "static" }} className={classes.appBar}>
+    <StylizedAppBar style={{ position: "static" }}>
       <Toolbar>
         <Typography variant="h6">Calendar</Typography>
       </Toolbar>
-    </AppBar>
+    </StylizedAppBar>
 <Calendar
       localizer={localizer}
       events={events}
@@ -236,7 +240,7 @@ function Faculty() {
       endAccessor="end"
       style={{ height: 500 }}
     />  </div>
-</div>
+</ContainerWrapper>
 
 
 

@@ -1,97 +1,81 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core'
+import TextField from '@mui/material/TextField';
+import styled from 'styled-components';
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(2),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1),
-    },
-    userInputField: {
-        width: '100%',
-        margin: theme.spacing(1, 1, 3, 1),
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
+const StyledContainer = styled(Container)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const StyledForm = styled.form`
+  width: 100%;
+  margin-top: 16px;
+`;
+
+const StyledButton = styled(Button)`
+  margin: 24px 0 16px;
+`;
 
 function CreateCourse() {
-    const classes = useStyles();
+  const [courseCode, setCourseCode] = useState('');
+  const [courseTitle, setCourseTitle] = useState('');
 
-    const [email, setEmail] = React.useState('');
-    const [emailError, setEmailError] = React.useState(false)
-    const [password, setPassword] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false)
-    const [courseCode, setCourseCode] = React.useState('');
-    const [courseTitle, setCourseTitle] = React.useState('');
-    
-    const handleSubmit = (event) => {
-        event.preventDefault()
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-        setEmailError(false)
-        setPasswordError(false)
-
-        if (email == '') {
-            setEmailError(true)
-        }
-        if (password == '') {
-            setPasswordError(true)
-        }
-
-        if (email && password) {
-            console.log(email, password)
-        }
+    if (courseCode === '') {
+      console.log('Course Code is required');
+      return;
+    }
+    if (courseTitle === '') {
+      console.log('Course Title is required');
+      return;
     }
 
-    return <>
-        <Container component="main" maxWidth="m">
-            <h2>Create Course</h2>
-            <div className={classes.paper}>
-                <form autoComplete="off" onSubmit={handleSubmit} className={classes.form}>
-                    <TextField
-                        label="Course Code"
-                        onChange={e => setCourseCode(e.target.value)}
-                        required
-                        autoFocus
-                        fullWidth
-                        variant="outlined"
-                        color="secondary"
-                        type="email"
+    console.log(courseCode, courseTitle);
+  };
 
-                        value={courseCode}
-                    />
-                    <Box sx={{ marginTop: '10px' }} />
-                    <TextField
-                        label="Course Title"
-                        onChange={e => setCourseTitle(e.target.value)}
-                        required
-                        variant="outlined"
-                        fullWidth
-                        color="secondary"
-                        type="password"
-                        value={courseTitle}
-
-                    />
-                    <Button variant="outlined" color="secondary" type="submit" classes={classes.userInputField}>Create Course</Button>
-                </form>
-            </div>
-        </Container>
+  return (
+    <>
+      <StyledContainer component="main" maxWidth="sm">
+        <h2>Create Course</h2>
+        <div>
+          <StyledForm autoComplete="off" onSubmit={handleSubmit}>
+            <TextField
+              label="Course Code"
+              onChange={(e) => setCourseCode(e.target.value)}
+              required
+              autoFocus
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              type="email"
+              value={courseCode}
+            />
+            <Box sx={{ marginTop: '10px' }} />
+            <TextField
+              label="Course Title"
+              onChange={(e) => setCourseTitle(e.target.value)}
+              required
+              variant="outlined"
+              fullWidth
+              color="secondary"
+              type="password"
+              value={courseTitle}
+            />
+            <StyledButton variant="outlined" color="secondary" type="submit">
+              Create Course
+            </StyledButton>
+          </StyledForm>
+        </div>
+      </StyledContainer>
     </>
+  );
 }
 
 export default CreateCourse;
