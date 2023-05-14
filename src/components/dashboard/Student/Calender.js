@@ -29,26 +29,26 @@ function Calender() {
     const [dates, setDates] = useState(new Map());
   
     // Fetch data from MySQL on component mount
-    useEffect(() => {
-      fetch("/api/data")
-        .then((response) => response.json())
-        .then((data) => {
-          setRows(data);
-        });
-    }, []);
+    // useEffect(() => {
+    //   fetch("/api/data")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       setRows(data);
+    //     });
+    // }, []);
   
     // Fetch data for calendar on component mount
-    useEffect(() => {
-      fetch("/api/calendar")
-        .then((response) => response.json())
-        .then((data) => {
-          const map = new Map();
-          data.forEach((date) => {
-            map.set(date.date, date.isAvailable);
-          });
-          setDates(map);
-        });
-    }, []);
+    // useEffect(() => {
+    //   fetch("/api/calendar")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       const map = new Map();
+    //       data.forEach((date) => {
+    //         map.set(date.date, date.isAvailable);
+    //       });
+    //       setDates(map);
+    //     });
+    // }, []);
   
     const getCellColor = (date) => {
       if (dates.has(date)) {

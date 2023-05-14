@@ -1,34 +1,3 @@
-
-// import { useState } from "react";
-
-// const GLMap =({}) => {
-//   const [lat, setLng] = useState(10.906103301151411);
-//   const [lng, setLon] = useState(76.8977381437845);
-//   return (
-//       <Map
-//         mapboxAccessToken={process.env.MAPBOX_API}
-//         style={{
-//           width: "500px",
-//           height: "500px",
-//           borderRadius: "15px",
-//           border: "2px solid red",
-//         }}
-//         initialViewState={{
-//           longitude: lng,
-//           latitude: lat,
-//         }}
-//         mapStyle="mapbox://styles/mapbox/streets-v9"
-//       >
-//         <Marker longitude={lng} latitude={lat} />
-//         <NavigationControl position="bottom-right" />
-//         <FullscreenControl />
-
-//         <GeolocateControl />
-//       </Map>
-//   );
-// }
-
-
 import "mapbox-gl/dist/mapbox-gl.css";
 import Map, {
   Marker,

@@ -16,14 +16,11 @@ import{
     FormControl, 
     InputLabel,
 } from "@mui/material";
-// import Select from "@material-ui/core/Select";
-// import MenuItem from "@material-ui/core/MenuItem";
-// import Button from "@material-ui/core/Button";
 
 import RenderDashboard from './RenderDashboard'
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
+// var currentPage="";
 const Student = ({}) => {
 
   const [isAttendanceEntrySelected, setAttendanceEntrySelected] = React.useState(null);
@@ -81,21 +78,22 @@ const Student = ({}) => {
   // const columns = ["Column 1", "Column 2", "Column 3"];
     return (
         <>       
-        <AppBar position="static">
-        <Container maxWidth="xl" type="flex">
-        <Toolbar disableGutters>
+        <AppBar position="static" display="flex"  sx={{backgroundColor: "#1976d2 #important" }}>
+        <Container maxWidth="xl">
+        <Toolbar disableGutters sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
             <Typography
             variant="h6"
             noWrap
             component="a"
             href="/"
             sx={{
-                mr: 2,
+                mr: 4,
                 display: { xs: 'none', md: 'flex' },
                 fontFamily: 'monospace',
                 fontWeight: 700,
                 letterSpacing: '.0rem',
                 color: 'inherit',
+                // backgroundColor: 'inherit',
                 textDecoration: 'none',
             }}
             >
@@ -103,18 +101,35 @@ const Student = ({}) => {
             </Typography>
             
             <Box sx={{ flexGrow: 1, display: 'flex' }}>
-              <Button onClick={(event) => {setCurrentPage("Enter Attendance");setAttendanceEntrySelected(event.currentTarget);console.log(currentPage)}} sx={{ my: 2, color: 'white', display: 'flex' }}>
+              <Button onClick={(event) => {
+                setCurrentPage("Enter Attendance");
+                setAttendanceEntrySelected(event.currentTarget);
+                console.log(currentPage)}} 
+                sx={{ my: 2, color: 'white', display: 'flex' }}
+              >
                 Enter Attendance
               </Button>
-            </Box>
-
-            <Box sx={{ flexGrow: 1, display: 'flex' }}>
-              <Button onClick={(event) => {setCurrentPage("View Attendance");setAttendanceViewSelected(event.currentTarget);console.log(currentPage)}} sx={{ my: 2, color: 'white', display: 'flex' }}>
+            
+              <Button onClick={(event) => {
+                setCurrentPage("View Attendance");
+                setAttendanceViewSelected(event.currentTarget);
+                console.log(currentPage)}} 
+                sx={{ my: 2, color: 'white', display: 'flex' }}
+                >
                 View Attendance
+              </Button>
+
+              <Button onClick={(event) => {
+                setCurrentPage("Apply OD");
+                setODApplicationSelected(event.currentTarget);
+                console.log(currentPage)}} 
+                sx={{ my: 2, color: 'white', display: 'flex' }}
+                >
+                Apply OD
               </Button>
             </Box>
 
-            {/* <Box sx={{ flexGrow: 0 }}>
+            <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={(event) => {setProfileViewSelected(event.currentTarget);}} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -142,12 +157,11 @@ const Student = ({}) => {
                   </MenuItem>
                 ))}
               </Menu>
-            </Box> */}
+            </Box>
 
         </Toolbar>
         </Container>
         </AppBar>
-        {console.log({currentPage})}
         <RenderDashboard currentPage={currentPage}/>
         </>
     );

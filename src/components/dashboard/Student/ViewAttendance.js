@@ -45,8 +45,8 @@ const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
     },
-    button: {
-      margin: theme.spacing(1),
+    submitButton: {
+      margin: theme.spacing(2),
     },
   }));
 
@@ -195,7 +195,7 @@ const Attendance =() =>
         
     
       <Date label="Enter Start Date"/>
-      <Date label="Enter End Date" /> <br />
+      <Date label="Enter End Date" /><br/>
       <Button
           className={classes.submitButton}
           variant="contained"
@@ -205,7 +205,7 @@ const Attendance =() =>
           // onSubmit={}
         >
           Submit
-       </Button><br /> <br/>
+       </Button> 
         <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
             <Table data={Data} />
