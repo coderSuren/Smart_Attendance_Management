@@ -78,7 +78,7 @@ const Student = ({}) => {
   // const columns = ["Column 1", "Column 2", "Column 3"];
     return (
         <>       
-        <AppBar position="static" display="flex"  sx={{backgroundColor: "#1976d2 #important" }}>
+        <AppBar position="static" display="flex"  sx={{backgroundColor: "#1976d2 #important" }} id="student-appbar">
         <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
             <Typography

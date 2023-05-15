@@ -188,6 +188,7 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
             color="primary"
             // className={classes.submit}
             onClick={loginUser}
+            id="signinButton"
           >
             Sign In
           </Button>
