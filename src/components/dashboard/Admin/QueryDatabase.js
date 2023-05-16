@@ -1,23 +1,56 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { TextField } from '@material-ui/core';
 
 function QueryDatabase() {
-    return <>
-        <Box component="main" sx={{ p: 7 }}>
-            <TextField id="standard-basic" fullWidth label="Enter Query" variant="standard" />
-            <br />
-            <br />
-            <Button variant="contained">Submit Query </Button>
-        </Box>
-    </>
+  const [userQuery, setUserQuery] = useState('');
+  const [queryResult, setQueryResult] = useState('');
+
+  const resolveQuery = async () => {
+    const queryOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: userQuery }),
+    };
+
+    // Define mysql localhost URL
+    const URL = 'http://localhost:5000/admin';
+
+    try {
+      const resp = await fetch(URL, queryOptions);
+      const data = await resp.text();
+      console.log(data);
+      setQueryResult(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return (
+    <Box component="main" sx={{ p: 7 }}>
+      <TextField
+        id="standard-basic"
+        fullWidth
+        label="Enter Query"
+        variant="standard"
+        value={userQuery}
+        onChange={(e) => setUserQuery(e.target.value)}
+      />
+
+      <br />
+      <br />
+      <Button variant="contained" onClick={resolveQuery}>
+        Submit Query
+      </Button>
+      
+      <br />
+      <br />
+      <label>{queryResult}</label>
+    </Box>
+  );
 }
 
 export default QueryDatabase;

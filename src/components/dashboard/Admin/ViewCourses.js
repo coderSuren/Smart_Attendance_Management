@@ -43,13 +43,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ViewStudents() {
+function ViewCourses() {
   const classes = useStyles();
   const [rows, setRows] = React.useState([]);
 
   React.useEffect(() => {
     const getTableFromDatabase = async () => {
-      const studentTableQuery = `select * from Student`;
+      const studentTableQuery = `select * from Course`;
       const studentTableQueryOptions = {
         method: 'POST',
         headers: {
@@ -76,31 +76,21 @@ function ViewStudents() {
 
   return (
     <Container component="main" maxWidth="xl">
-      <h2>View Students</h2>
+      <h2>View Courses</h2>
       {rows.length > 0 ? (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center"><b>Email</b></TableCell>
-                <TableCell align="center"><b>Student ID</b></TableCell>
-                <TableCell align="center"><b>First Name</b></TableCell>
-                <TableCell align="center"><b>Last Name</b></TableCell>
-                <TableCell align="center"><b>Section</b></TableCell>
-                <TableCell align="center"><b>Specialization</b></TableCell>
-                <TableCell align="center"><b>Semester</b></TableCell>
+                <TableCell align="center"><b>Course Code</b></TableCell>
+                <TableCell align="center"><b>Title </b></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rows.map((entry) => (
-                <TableRow key={entry.student_id}>
-                  <TableCell align="left">{entry.email}</TableCell>
-                  <TableCell align="center">{entry.student_id}</TableCell>
-                  <TableCell align="center">{entry.first_name}</TableCell>
-                  <TableCell align="center">{entry.last_name}</TableCell>
-                  <TableCell align="center">{entry.section}</TableCell>
-                  <TableCell align="center">{entry.specialization}</TableCell>
-                  <TableCell align="center">{entry.semester}</TableCell>
+                <TableRow key={entry.course_code}>
+                  <TableCell align="center">{entry.course_code}</TableCell>
+                  <TableCell align="center">{entry.course_title}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -113,4 +103,4 @@ function ViewStudents() {
   );
 }
 
-export default ViewStudents;
+export default ViewCourses;
