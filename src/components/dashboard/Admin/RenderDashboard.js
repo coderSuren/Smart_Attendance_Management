@@ -10,6 +10,7 @@ import QueryDatabase from './QueryDatabase';
 import CreateClass from './CreateClass';
 import CreateAdmin from './CreateAdmin';
 import AssignStudentToClass from './AssignStudentToClass';
+import ViewStudents from './ViewStudents';
 
 // For reference. Already defined in Admin.js.
 // const viewDatabaseOptions = ['View Students', 'View Faculty', 'View Courses'];
@@ -21,11 +22,7 @@ function RenderDashboard(currentPage) {
   console.log(currentPage.currentPage);
   if (currentPage.currentPage === "View Students") {
     return <>
-      <Box component="main" sx={{ p: 3 }}>
-        <Typography>
-          View Students
-        </Typography>
-      </Box>
+     <ViewStudents/>
     </>
   }
   else if (currentPage.currentPage === "View Faculty") {
