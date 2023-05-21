@@ -7,7 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 export default function BasicDatePicker(props) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker label={props.label} sx={{m:1,minWidth: 120,}}/>
+        <DatePicker label={props.label} sx={{m:1,minWidth: 120,}} onChange={(date) => console.log(date)}/>
     </LocalizationProvider>
   );
 }

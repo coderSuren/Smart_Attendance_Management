@@ -78,7 +78,7 @@ const Student = ({}) => {
   // const columns = ["Column 1", "Column 2", "Column 3"];
     return (
         <>       
-        <AppBar position="static" display="flex"  sx={{backgroundColor: "#1976d2 #important" }}>
+        <AppBar position="static" display="flex"  sx={{backgroundColor: "#1976d2 !important" }}>
         <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
             <Typography
@@ -92,7 +92,7 @@ const Student = ({}) => {
                 fontFamily: 'monospace',
                 fontWeight: 700,
                 letterSpacing: '.0rem',
-                color: 'inherit',
+                color: 'white !important',
                 // backgroundColor: 'inherit',
                 textDecoration: 'none',
             }}
@@ -105,7 +105,7 @@ const Student = ({}) => {
                 setCurrentPage("Enter Attendance");
                 setAttendanceEntrySelected(event.currentTarget);
                 console.log(currentPage)}} 
-                sx={{ my: 2, color: 'white', display: 'flex' }}
+                sx={{ my: 2, color: 'white !important', display: 'flex' }}
               >
                 Enter Attendance
               </Button>
@@ -114,7 +114,7 @@ const Student = ({}) => {
                 setCurrentPage("View Attendance");
                 setAttendanceViewSelected(event.currentTarget);
                 console.log(currentPage)}} 
-                sx={{ my: 2, color: 'white', display: 'flex' }}
+                sx={{ my: 2, color: 'white !important', display: 'flex' }}
                 >
                 View Attendance
               </Button>
@@ -123,7 +123,7 @@ const Student = ({}) => {
                 setCurrentPage("Apply OD");
                 setODApplicationSelected(event.currentTarget);
                 console.log(currentPage)}} 
-                sx={{ my: 2, color: 'white', display: 'flex' }}
+                sx={{ my: 2, color: 'white !important', display: 'flex' }}
                 >
                 Apply OD
               </Button>

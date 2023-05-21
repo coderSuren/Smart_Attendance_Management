@@ -25,6 +25,10 @@ import Data from './Data'
 import { makeStyles } from "@material-ui/core/styles";
 import Date from "./Datepicker"
 import Popup from './Popup'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+const dayjs = require("dayjs")
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,25 +54,17 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-
 const Attendance =() =>
 {
     const classes = useStyles();
-  
+    console.log(Data);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [courseId, setCourseId] = useState("");
     const [facultyId, setFacultyId] = useState("");
-    const [attendanceData, setAttendanceData] = useState([]);
-
-    const handleStartDateChange = (event) => {
-        setStartDate(event.target.value);
-    };
-
-    const handleEndDateChange = (event) => {
-        setEndDate(event.target.value);
-    };
-
+    const [tableData, setTableData] = useState([]);
+    
+  const [attendanceData, setAttendanceData] = useState([]);
     const handleCourseIdChange = (event) => {
         setCourseId(event.target.value);
     };
@@ -76,9 +72,20 @@ const Attendance =() =>
     const handleFacultyIdChange = (event) => {
         setFacultyId(event.target.value);
     };
+    const handleStartDateChange = (date) => {
+        let formattedDate = dayjs(date.$d).format('YYYY-MM-DD');
+        setStartDate(formattedDate);
+    };
+    
+    const handleEndDateChange = (date) => {
+      let formattedDate = dayjs(date.$d).format('YYYY-MM-DD');
+      setEndDate(formattedDate);
+    };
 
     const fetchData =  async () => {
-        const loginQuery = `SELECT * FROM Attendance WHERE courseid = ${courseId} AND facultyid = ${facultyId} AND date >= ${startDate} AND date <= ${endDate}`;
+        // console.log(startDate);
+        // console.log(endDate);
+        const loginQuery = `SELECT * FROM Attendance WHERE courseid = '${courseId}' AND facultyid = '${facultyId}' AND date >= '${startDate}' AND date <= '${endDate}'`;
         const loginRequestOptions = {
         method: 'POST',
         headers: {
@@ -94,19 +101,8 @@ const Attendance =() =>
         try {
         const resp = await fetch(URL, loginRequestOptions);
         const data = await resp.json();
-        console.log(data);
-        // if (data.success) {
-        //   // Handle successful response
-        // } else {
-        //   showError();
-        // }
-        if (data[1].success){
-            console.log(data)        
-        }
-        else{
-            // showError();
-            // setIsLogin(true);
-        }
+        setTableData(data);
+        console.log(tableData);
         } catch (e) {
         // showError();
         }
@@ -134,13 +130,16 @@ const Attendance =() =>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select-required"
-            autoWidth
             // value={course_id}
-            onChange={(e) => setCourseId(e.target.value)}
+            onChange={(event) => handleCourseIdChange(event)}
           >
             {Data.map((course) => (
-              <MenuItem value={course.CourseId}>
-                {course.CourseId}
+              <MenuItem 
+                key={course.StudentID} 
+                value={course.CourseID}
+                style = {{ display: 'flex'}}
+              >
+                {course.CourseID}
               </MenuItem>
             ))}
           </Select>
@@ -148,14 +147,19 @@ const Attendance =() =>
         <FormControl className={classes.formControl} sx={{m:1,minWidth: 120,}}>
           <InputLabel id="faculty_id_label">Faculty ID</InputLabel>
           <Select
+            
             labelId="faculty_id_label"
             id="demo-simple-select-required"
             // value={faculty_id}
-            onChange={(e) => setFacultyId(e.target.value)}
+            onChange={(event) => handleFacultyIdChange(event)}
           >
             {Data.map((faculty) => (
-              <MenuItem key={faculty.FacultyId} value={faculty.FacultyId}>
-                {faculty.FacultyId}
+              <MenuItem 
+                key={faculty.StudentID} 
+                value={faculty.FacultyID} 
+                style = {{ display: 'flex' }}
+              >
+                {faculty.FacultyID}
               </MenuItem>
             ))} 
           </Select>
@@ -193,22 +197,26 @@ const Attendance =() =>
         </FormControl> */}
  
         
-    
-      <Date label="Enter Start Date"/>
-      <Date label="Enter End Date" /><br/>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker label="Enter Start Date" sx={{m:1,minWidth: 120,}} onChange={(date) => handleStartDateChange(date)}/>
+          <DatePicker label="Enter End Date" sx={{m:1,minWidth: 120,}} onChange={(date) => handleEndDateChange(date)}/>
+          
+      </LocalizationProvider>
+      
+      {/* <Date label="Enter End Date" onChange={(date) => setEndDate(date)} /><br/> */}
       <Button
           className={classes.submitButton}
           variant="contained"
           color="primary"
           type="submit"
           sx={{m:1,minWidth: 120,}}
-          // onSubmit={}
+          onClick={(e) => {fetchData(); e.preventDefault();}}
         >
           Submit
        </Button> 
         <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
-            <Table data={Data} />
+            <Table data={tableData} />
         </Grid>
         <Grid item xs={12} md={4}>
             <Calender />
