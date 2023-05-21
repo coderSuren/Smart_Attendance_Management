@@ -1,35 +1,25 @@
 import React,{ useState, useEffect } from 'react';
 import{
-    AppBar,
-    Box,
-    Toolbar,
-    IconButton,
-    Typography,
-    Menu,
-    Container,
-    Avatar,
     Button,
-    Tooltip,
     MenuItem,
     Grid,
     Select,
     FormControl, 
     InputLabel,
 } from "@mui/material";
-// import Select from "@material-ui/core/Select";
-// import MenuItem from "@material-ui/core/MenuItem";
-// import Button from "@material-ui/core/Button";
+
 import Table from './Table'
-import Calender from './Calender'
-import Data from './Data'
-import { makeStyles } from "@material-ui/core/styles";
-import Date from "./Datepicker"
+import Calendar from "react-calendar";
 import Popup from './Popup'
+import Paper from "@material-ui/core/Paper";
+import "react-calendar/dist/Calendar.css";
+
+import { makeStyles } from "@material-ui/core/styles";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-const dayjs = require("dayjs")
 
+const dayjs = require("dayjs")
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -53,18 +43,19 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(2),
     },
   }));
-
 const Attendance =() =>
 {
     const classes = useStyles();
-    console.log(Data);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [courseId, setCourseId] = useState("");
     const [facultyId, setFacultyId] = useState("");
     const [tableData, setTableData] = useState([]);
-    
-  const [attendanceData, setAttendanceData] = useState([]);
+    const [courses, setCoursesData] = useState([]);
+    const [faculties, setFacultiesData] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [highlightedDates, setHighlightedDates] = useState([]);
+
     const handleCourseIdChange = (event) => {
         setCourseId(event.target.value);
     };
@@ -82,10 +73,32 @@ const Attendance =() =>
       setEndDate(formattedDate);
     };
 
+    const tileContent = ({ date, view }) => {
+      if (view === 'month' && highlightedDates.some((d) => d.toDateString() === date.toDateString())) {
+        return <div style={{ backgroundColor: 'red', borderRadius: '50%', height: '80%', width: '80%', margin: '10%' }}></div>;
+      }
+      return null;
+    };
+
     const fetchData =  async () => {
-        // console.log(startDate);
-        // console.log(endDate);
-        const loginQuery = `SELECT * FROM Attendance WHERE courseid = '${courseId}' AND facultyid = '${facultyId}' AND date >= '${startDate}' AND date <= '${endDate}'`;
+        
+        if (courseId==="" || facultyId==="" || startDate == "" || endDate===""){
+          setErrorMessage('Please fill in all fields.');
+          return ;
+        }
+        else{
+          setErrorMessage('');
+        }
+        var loginQuery = `SELECT * FROM Student_Attendance WHERE course_code = '${courseId}' AND faculty_id = '${facultyId}' AND class_date >= '${startDate}' AND class_date <= '${endDate}'`;
+        if (courseId=="Select All" && facultyId=="Select All"){
+          loginQuery = `SELECT * FROM Student_Attendance WHERE class_date >= '${startDate}' AND class_date <= '${endDate}'`;
+        }
+        else if (courseId=="Select All"){
+          loginQuery = `SELECT * FROM Student_Attendance WHERE faculty_id = '${facultyId}' AND class_date >= '${startDate}' AND class_date <= '${endDate}'`;
+        }
+        else if (facultyId=="Select All"){
+          loginQuery = `SELECT * FROM Student_Attendance WHERE course_code = '${courseId}' AND class_date >= '${startDate}' AND class_date <= '${endDate}'`;
+        }
         const loginRequestOptions = {
         method: 'POST',
         headers: {
@@ -97,49 +110,72 @@ const Attendance =() =>
     
         // Define mysql localhost url
         const URL = 'http://localhost:5000/attendance';
-        console.log(loginRequestOptions)
+        // console.log(loginRequestOptions)
         try {
         const resp = await fetch(URL, loginRequestOptions);
         const data = await resp.json();
-        setTableData(data);
+        if(data) { setTableData(data);}
         console.log(tableData);
         } catch (e) {
         // showError();
         }
     };
+    useEffect(() => {
+      const retrieve = async () => {
+        const loginQuery = `SELECT DISTINCT teacher_id from Faculty;`;
+        const loginRequestOptions = {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: loginQuery}),
+        };
+    
+        const URL = 'http://localhost:5000/attendance';
+        try {
+        const resp = await fetch(URL, loginRequestOptions)
+        .then(response => response.json())
+        .then(response => setFacultiesData(response));
+        
+        
+        loginRequestOptions.body=JSON.stringify({ query: `select distinct course_code from Course;`})
+        resp = await fetch(URL, loginRequestOptions)
+        .then(response =>  response.json())
+        .then(response => setCoursesData(response));;
+        
 
-    // useEffect(() => {
-    //   fetchData();
-    // }, []); // Fetch data on component mount
-    // const handleSubmit = async (e) => {
-    //   e.preventDefault();
-    //   const res = await fetch(
-    //     `http://localhost:5000/attendance?course_id=${course_id}&faculty_id=${faculty_id}&start_date=${start_date}&end_date=${end_date}`
-    //   );
-    //   const data = await res.json();
-    //   setAttendance(data);
-    // };
-    // const columns = ["Column 1", "Column 2", "Column 3"];
+        } catch (e) {
+        }
+      }
+      retrieve();
+    }, []);
 
 
     return (
         <div className={classes.root}>
         <Popup />
+       
         <FormControl className={classes.formControl} sx={{m:1,minWidth: 120,}}>
           <InputLabel id="course_id_label">Course ID</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select-required"
-            // value={course_id}
+            // value={"19CSE311"}
             onChange={(event) => handleCourseIdChange(event)}
           >
-            {Data.map((course) => (
+            <MenuItem 
+                value="Select All"
+                style={{display: 'flex'}}
+              >
+                Select All
+              </MenuItem>
+            {courses.map((course) => (
               <MenuItem 
-                key={course.StudentID} 
-                value={course.CourseID}
+                key={course.course_code} 
+                value={course.course_code}
                 style = {{ display: 'flex'}}
               >
-                {course.CourseID}
+                {course.course_code }
               </MenuItem>
             ))}
           </Select>
@@ -150,52 +186,27 @@ const Attendance =() =>
             
             labelId="faculty_id_label"
             id="demo-simple-select-required"
-            // value={faculty_id}
+            // value={"T001"}
             onChange={(event) => handleFacultyIdChange(event)}
           >
-            {Data.map((faculty) => (
+            <MenuItem 
+                value="Select All"
+                style={{display: 'flex'}}
+              >
+                Select All
+              </MenuItem>
+            {faculties.map((faculty) => (
               <MenuItem 
-                key={faculty.StudentID} 
-                value={faculty.FacultyID} 
+                key={faculty.teacher_id} 
+                value={faculty.teacher_id} 
                 style = {{ display: 'flex' }}
               >
-                {faculty.FacultyID}
+                {faculty.teacher_id}
               </MenuItem>
             ))} 
           </Select>
         </FormControl>
-        {/* <FormControl className={classes.formControl} sx={{m:1,minWidth: 120,}}>
-          <InputLabel id="demo-simple-select-autowidth-label">Start Date</InputLabel>
-          <Select
-            labelId="start_date_label"
-            id="start_date"
-            autoWidth
-            // value={start_date}
-            // onChange={(e) => setStartDate(e.target.value)}
-          >
-            {Data.map((date) => (
-              <MenuItem key={date.start_date} value={date.start_date}>
-                {date.start_date}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl className={classes.formControl} sx={{m:1,minWidth: 120,}}>
-          <InputLabel >End Date </InputLabel>
-          <Select
-            labelId="end_date_label"
-            id="end_date"
-            // value={end_date}
-            // onChange={(e) => setEndDate(e.target.value)}
-          >
-            {Data.map((date) => (
-              <MenuItem key={date.end_date} value={date.end_date}>
-                {date.end_date}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
- 
+        
         
       <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker label="Enter Start Date" sx={{m:1,minWidth: 120,}} onChange={(date) => handleStartDateChange(date)}/>
@@ -203,7 +214,7 @@ const Attendance =() =>
           
       </LocalizationProvider>
       
-      {/* <Date label="Enter End Date" onChange={(date) => setEndDate(date)} /><br/> */}
+      <br />
       <Button
           className={classes.submitButton}
           variant="contained"
@@ -214,12 +225,20 @@ const Attendance =() =>
         >
           Submit
        </Button> 
+        <span style={{color:'red'}}>
+        <h3>
+        {errorMessage && <p>{errorMessage}</p>}
+        </h3>
+        </span>
         <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
             <Table data={tableData} />
         </Grid>
         <Grid item xs={12} md={4}>
-            <Calender />
+        <Paper className={classes.paper}>
+            <Calendar tileContent={tileContent}
+            />
+        </Paper>
         </Grid>
         </Grid>
         </div> 

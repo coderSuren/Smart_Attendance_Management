@@ -11,10 +11,6 @@ import{
     Button,
     Tooltip,
     MenuItem,
-    Grid,
-    Select,
-    FormControl, 
-    InputLabel,
 } from "@mui/material";
 
 import RenderDashboard from './RenderDashboard'
@@ -29,53 +25,6 @@ const Student = ({}) => {
   const [isProfileViewSelected, setProfileViewSelected] = React.useState(null);
   const [currentPage, setCurrentPage] = React.useState("");
 
-  // const fetchData =  async () => {
-  //   const loginQuery = `SELECT * FROM Attendance WHERE courseid = ${courseId} AND facultyid = ${facultyId} AND date >= ${startDate} AND date <= ${endDate}`;
-  //   const loginRequestOptions = {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ query: loginQuery}),
-  //     // mode: 'cors',
-  //   };
-  
-  //   // Define mysql localhost url
-  //   const URL = 'http://localhost:5000/attendance';
-  //   console.log(loginRequestOptions)
-  //   try {
-  //     const resp = await fetch(URL, loginRequestOptions);
-  //     const data = await resp.json();
-  //     console.log(data);
-  //     // if (data.success) {
-  //     //   // Handle successful response
-  //     // } else {
-  //     //   showError();
-  //     // }
-  //     if (data[1].success){
-  //       console.log(data)        
-  //     }
-  //     else{
-  //       // showError();
-  //       // setIsLogin(true);
-  //     }
-  //   } catch (e) {
-  //     // showError();
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []); // Fetch data on component mount
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const res = await fetch(
-  //     `http://localhost:5000/attendance?course_id=${course_id}&faculty_id=${faculty_id}&start_date=${start_date}&end_date=${end_date}`
-  //   );
-  //   const data = await res.json();
-  //   setAttendance(data);
-  // };
-  // const columns = ["Column 1", "Column 2", "Column 3"];
     return (
         <>       
         <AppBar position="static" display="flex"  sx={{backgroundColor: "#1976d2 !important" }}>
