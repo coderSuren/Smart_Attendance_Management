@@ -74,8 +74,11 @@ const Attendance =() =>
     };
 
     const tileContent = ({ date, view }) => {
-      if (view === 'month' && highlightedDates.some((d) => d.toDateString() === date.toDateString())) {
-        return <div style={{ backgroundColor: 'red', borderRadius: '50%', height: '80%', width: '80%', margin: '10%' }}></div>;
+      if (view === 'month' && highlightedDates.find(x => x.date.toDateString() === date.toDateString() && x.attendance === 'A')) {
+          return <div style={{ backgroundColor: 'red', borderRadius: '50%', height: '80%', width: '80%', margin: '10%' }}></div>;
+      }
+      else if (view === 'month' && highlightedDates.find(x => x.date.toDateString() === date.toDateString() && x.attendance === 'P')) {
+          return <div style={{ backgroundColor: 'green', borderRadius: '50%', height: '80%', width: '80%', margin: '10%' }}></div>;
       }
       return null;
     };
@@ -114,8 +117,15 @@ const Attendance =() =>
         try {
         const resp = await fetch(URL, loginRequestOptions);
         const data = await resp.json();
-        if(data) { setTableData(data);}
-        console.log(tableData);
+        if(data) { 
+          setTableData(data);
+          let dates = [];
+          data.forEach((item) => {
+            dates.push({'date':new Date(item.class_date),'attendance':item.attendance});
+          });
+          setHighlightedDates(dates);         
+
+        }
         } catch (e) {
         // showError();
         }
