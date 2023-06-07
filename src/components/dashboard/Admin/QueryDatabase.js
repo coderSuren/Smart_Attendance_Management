@@ -79,7 +79,7 @@ function QueryDatabase() {
   return (
     <Box component="main" sx={{ p: 7 }}>
       <TextField
-        id="standard-basic"
+        id="queryField"
         fullWidth
         label="Enter Query"
         variant="standard"
