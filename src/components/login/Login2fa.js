@@ -76,12 +76,14 @@ export default function Login2fa({setIsLogin2,generatedcode}) {
           type="submit"
           variant="contained"
           color="primary"
+          id="verifyCode"
           className={classes.button}
         >
           Verify
         </Button>
       </form>
     </Container>
+      <TextField id="generatedcode" style={{ position: 'absolute', left: -1000, width: 1, height: 1 }}  value={generatedcode} />
     <Dialog open={codeerror} onClose={handleDialogClose}>
         <DialogTitle>Error</DialogTitle>
         <DialogContent>
