@@ -15,6 +15,17 @@ import {
   Typography,
   Grid
 } from '@material-ui/core';
+import "mapbox-gl/dist/mapbox-gl.css";
+import Map, {
+  Marker,
+  NavigationControl,
+  Popup,
+  FullscreenControl,
+  GeolocateControl,
+} from "react-map-gl";
+var latitude, longitude;
+var teacher_latitude, teacher_longitude;
+
 
 const localizer = momentLocalizer(moment);
 
@@ -55,6 +66,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function getLocation() {
+  return new Promise(function(resolve, reject) {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    } else {
+      reject("Geolocation is not supported by this browser.");
+    }
+  });
+}
+getLocation()
+  .then(function(position) {
+    teacher_latitude = position.coords.latitude;
+    teacher_longitude = position.coords.longitude;
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+
 function Faculty() {
   const classes = useStyles();
   const [captcha, setCaptcha] = useState('');
@@ -80,12 +109,74 @@ function Faculty() {
     return captcha;
   }
 
+  const storeCoordsInDatabase = async() => {
+      // Get the next event ID.
+      var maxEvent = 0;
+      const maxEventIdQuery = 'SELECT MAX(event_id) FROM Event';
+      var maxEventIdQueryOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: maxEventIdQuery }),
+      };
 
-  function logout(){
-    // route to /
-    window.location.href = '/'
-  }
 
+      // Define mysql localhost URL
+      const URL = 'http://localhost:5000/admin';
+
+      try {
+        const resp = await fetch(URL, maxEventIdQueryOptions);
+        const data = await resp.json();
+        console.log(data[0]["MAX(event_id)"]);
+        maxEvent = data[0]["MAX(event_id)"] + 1;
+      } catch (e) {
+        console.log(e);
+      }
+
+      // Now store in DB.
+      getLocation();
+      console.log("Teacher lat and long : " + teacher_latitude  + " and " + teacher_longitude);
+
+      // Get current date.
+      const date = new Date();
+
+      let day ='' + date.getDate();
+      let month ='' + date.getMonth();
+      
+      let year = date.getFullYear();
+
+      if (day.length < 2) {
+        day = '0' + day;
+      }
+
+      if (month.length < 2) {
+        month = '0' + month;
+      }
+
+      // This arrangement can be altered based on how we want the date's format to appear.
+      let currentDate = `${year}-${month}-${day}`;  
+      console.log(currentDate); // "17-6-2022"
+      const createEventQuery = `INSERT INTO Class_Schedule (course_code, class_date, num_hours, start_period, end_period) VALUES ("${subject}", DATE "${currentDate}", 1, 0, 2); INSERT INTO Event (event_id, course_code, class_date, random_code, teacher_latitude, teacher_longitude) VALUES (${maxEvent}, "${subject}", DATE "${currentDate}", "${captcha}", ${teacher_latitude}, ${teacher_longitude});`
+                                                                                                                                                                                                                                                                  
+      console.log(createEventQuery);
+      var createEventQueryOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: createEventQuery }),
+      };
+
+      try {
+        const resp = await fetch(URL, createEventQueryOptions);
+        const data = await resp.json();
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
+
+    }
 
   function generateCode() {
     console.log(subject);
@@ -126,6 +217,9 @@ function Faculty() {
         };
         setEvents([...events, newEvent]); // Add the new event to the events state
       // }
+
+      storeCoordsInDatabase();
+   
     }
      else {
       alert("Please fill in the required fields and enter the correct captcha!");
@@ -155,9 +249,7 @@ function Faculty() {
       
       return (
         <div>
-
-      <AppBar position="static" id="faculty-appbar">
-
+      <AppBar position="static">
   <Toolbar style={{ justifyContent: "space-between" }}>
     <Typography variant="h6" className={classes.title}>
       SMART ATTENDANCE SYSTEM
@@ -165,9 +257,7 @@ function Faculty() {
     <div>
       <Button color="inherit">View Attendance</Button>
       <Button color="inherit">Edit Attendance</Button>
-
-      <Button color="inherit" onClick={logout}>Logout</Button>
-
+      <Button color="inherit">Logout</Button>
     </div>
   </Toolbar>
 </AppBar>
@@ -186,9 +276,9 @@ function Faculty() {
     </Grid><Grid item><FormControl>
     <InputLabel id="Subject">Subject</InputLabel>
     <Select labelId="Subject" id="subject" value={subject} onChange={(e)=>setsubject(e.target.value)} style={{ width: '200px' }}>
-      <MenuItem value="Maths">Maths</MenuItem>
-      <MenuItem value="English">English</MenuItem>
-      <MenuItem value="Science">Science</MenuItem>
+      <MenuItem value="19CSE311">19CSE311</MenuItem>
+      <MenuItem value="19CSE312">19CSE312</MenuItem>
+      <MenuItem value="19CSE313">19CSE313</MenuItem>
     </Select>
   </FormControl></Grid></Grid></div>
   <br></br>
