@@ -7,9 +7,32 @@ import Map, {
   GeolocateControl,
 } from "react-map-gl";
 import { useState } from "react";
+
+var latitude, longitude;
+
+function getLocation() {
+  return new Promise(function(resolve, reject) {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    } else {
+      reject("Geolocation is not supported by this browser.");
+    }
+  });
+}
+
+getLocation()
+  .then(function(position) {
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+    console.log(latitude, longitude);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
 function GLMap() {
-  const [lng, setLng] = useState(76.8977381437845);
-  const [lat, setLat] = useState(10.906103301151411);
+  const [lng, setLng] = useState(longitude);
+  const [lat, setLat] = useState(latitude);
+
 
   return (
     <div className="App">

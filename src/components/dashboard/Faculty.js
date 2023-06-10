@@ -80,10 +80,12 @@ function Faculty() {
     return captcha;
   }
 
+
   function logout(){
     // route to /
     window.location.href = '/'
   }
+
 
   function generateCode() {
     console.log(subject);
@@ -153,7 +155,9 @@ function Faculty() {
       
       return (
         <div>
+
       <AppBar position="static" id="faculty-appbar">
+
   <Toolbar style={{ justifyContent: "space-between" }}>
     <Typography variant="h6" className={classes.title}>
       SMART ATTENDANCE SYSTEM
@@ -161,7 +165,9 @@ function Faculty() {
     <div>
       <Button color="inherit">View Attendance</Button>
       <Button color="inherit">Edit Attendance</Button>
+
       <Button color="inherit" onClick={logout}>Logout</Button>
+
     </div>
   </Toolbar>
 </AppBar>
