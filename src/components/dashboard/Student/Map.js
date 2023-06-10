@@ -57,8 +57,8 @@ function GLMap() {
 
         <GeolocateControl />
       </Map>
-      <h3>Longitude: 76.8977381437845;</h3>
-      <h3>Latitude: 10.906103301151411</h3>
+      <h3>Longitude: {longitude}</h3>
+      <h3>Latitude: {latitude}</h3>
     </div>
   );
 }
