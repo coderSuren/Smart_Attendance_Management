@@ -80,6 +80,11 @@ function Faculty() {
     return captcha;
   }
 
+  function logout(){
+    // route to /
+    window.location.href = '/'
+  }
+
   function generateCode() {
     console.log(subject);
     console.log(time);
@@ -156,7 +161,7 @@ function Faculty() {
     <div>
       <Button color="inherit">View Attendance</Button>
       <Button color="inherit">Edit Attendance</Button>
-      <Button color="inherit">Logout</Button>
+      <Button color="inherit" onClick={logout}>Logout</Button>
     </div>
   </Toolbar>
 </AppBar>

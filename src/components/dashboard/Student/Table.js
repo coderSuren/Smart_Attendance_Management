@@ -10,20 +10,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { locale } from 'dayjs';
-// import axios from "axios";
 
-// function createData(n,cal,f,car,p) {
-//     return { name:n, calories:cal, fat:f, carbs:car, protein:p };
-// }
-  
-// const rows = [
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
-  
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -54,24 +41,21 @@ const CustomTable = (props) =>{
           <TableHead>
             <TableRow>
               <TableCell>Date</TableCell>
-              <TableCell>Course ID</TableCell>
-              <TableCell>Start Period</TableCell>
-              <TableCell>End Period</TableCell>
-              <TableCell>Number Of Hours</TableCell>
-              <TableCell>Present</TableCell>
+              <TableCell>Course Code</TableCell>
+              <TableCell>Faculty ID</TableCell>
+              <TableCell>Attendance</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
               <TableRow>
                 <TableCell component="th" scope="row">
-                  {row.Date}
+                  {row.class_date.slice(0,10)}
                 </TableCell>
-                <TableCell>{row.CourseID}</TableCell>
-                <TableCell>{row.StartPeriod}</TableCell>
-                <TableCell>{row.EndPeriod}</TableCell>
-                <TableCell>{row.NumberOfHours}</TableCell>
-                <TableCell>{row.Present}</TableCell>
+                {/* <TableCell>{row.class_date}</TableCell> */}
+                <TableCell>{row.course_code}</TableCell>
+                <TableCell>{row.faculty_id}</TableCell>
+                <TableCell>{row.attendance}</TableCell>
               </TableRow>
             ))}
           </TableBody>

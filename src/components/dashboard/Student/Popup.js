@@ -13,7 +13,7 @@ const Pop = () => {
         variant="contained"
         color="primary"
         type="submit"
-        sx={{m:1,minWidth: 120,backgroundColor:"",}}
+        sx={{m:1,minWidth: 120,}}
         // onSubmit={}
       >
         View Location
