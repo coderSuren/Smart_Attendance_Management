@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { SigninContainer } from './Loginstyles';
+import Background from './Background';
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(4),
@@ -20,11 +22,15 @@ const useStyles = makeStyles((theme) => ({
 export default function Login2fa({setIsLogin2,generatedcode}) {
   const classes = useStyles();
   const [code, setCode] = useState('');
+  const [codeerror,setcodeerror]=useState(false);
 
-  const handleCodeChange = (event) => {
-    setCode(event.target.value);
-  };
+//   const handleCodeChange = (event) => {
+//     setCode(event.target.value);
+//   };
 
+  function handleDialogClose(){
+    setcodeerror(false)
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     // Perform authentication or verification logic here
@@ -35,12 +41,19 @@ export default function Login2fa({setIsLogin2,generatedcode}) {
     if (String(generatedcode) === code){
         console.log("jslkdfj")
         setIsLogin2(true);
+        setcodeerror(false)
+    }else{
+        setcodeerror(true)
     }
     // setIsLogin2(true)
   };
 
   return (
-    <Container maxWidth="xs">
+    <>
+    <Background/>
+    <SigninContainer>
+      <Container style={{backgroundcolor:"white"}}>
+    <Container maxWidth="xs" style={{backgroundcolor:"white"}}>
         
       <form className={classes.container} onSubmit={handleSubmit}>
       <Typography variant="h5" component="h2" gutterBottom>
@@ -63,12 +76,30 @@ export default function Login2fa({setIsLogin2,generatedcode}) {
           type="submit"
           variant="contained"
           color="primary"
+          id="verifyCode"
           className={classes.button}
         >
           Verify
         </Button>
       </form>
     </Container>
+      <TextField id="generatedcode" style={{ position: 'absolute', left: -1000, width: 1, height: 1 }}  value={generatedcode} />
+    <Dialog open={codeerror} onClose={handleDialogClose}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Code does not match. Please try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </Container>
+      </SigninContainer>
+    </>
   );
 }
 

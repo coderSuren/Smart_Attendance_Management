@@ -7,6 +7,7 @@ import Map, {
   GeolocateControl,
 } from "react-map-gl";
 import { useState } from "react";
+
 var latitude, longitude;
 
 function getLocation() {
@@ -31,6 +32,7 @@ getLocation()
 function GLMap() {
   const [lng, setLng] = useState(longitude);
   const [lat, setLat] = useState(latitude);
+
 
   return (
     <div className="App">

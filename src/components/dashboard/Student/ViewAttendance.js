@@ -117,6 +117,7 @@ const Attendance =() =>
         try {
         const resp = await fetch(URL, loginRequestOptions);
         const data = await resp.json();
+
         if(data) { 
           setTableData(data);
           let dates = [];
@@ -126,6 +127,7 @@ const Attendance =() =>
           setHighlightedDates(dates);         
 
         }
+
         } catch (e) {
         // showError();
         }

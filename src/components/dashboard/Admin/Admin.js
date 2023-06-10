@@ -106,7 +106,9 @@ function Admin() {
                 ))}
               </Menu>
 
-              <Button onClick={(event) => {setDatabaseQuerySelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'flex' }}>
+
+              <Button onClick={(event) => {setDatabaseQuerySelected(event.currentTarget);}} sx={{ my: 2, color: 'white', display: 'flex' }} id='advanced'>
+
                 Advanced Options
               </Button>
               <Menu

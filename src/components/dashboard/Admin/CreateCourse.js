@@ -1,97 +1,109 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import { TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(2),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1),
-    },
-    userInputField: {
-        width: '100%',
-        margin: theme.spacing(1, 1, 3, 1),
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { TableCell } from '@mui/material';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import Paper from '@mui/material/Paper';
+import TableRow from '@mui/material/TableRow';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+
 
 function CreateCourse() {
-    const classes = useStyles();
+  const [invalidQuery, setInvalidQuery] = useState(false);
+  const [courseCode, setCourseCode] = useState('');
+  const [courseTitle, setCourseTitle] = useState('');
 
-    const [email, setEmail] = React.useState('');
-    const [emailError, setEmailError] = React.useState(false)
-    const [password, setPassword] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false)
-    const [courseCode, setCourseCode] = React.useState('');
-    const [courseTitle, setCourseTitle] = React.useState('');
-    
-    const handleSubmit = (event) => {
-        event.preventDefault()
+  const resolveQuery = async () => {
+    const queryOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: "INSERT INTO Course (course_code, course_title) VALUES (" + "'"
+       + courseCode + "', '" +  + courseTitle + "');"}),
+    };
 
-        setEmailError(false)
-        setPasswordError(false)
-
-        if (email == '') {
-            setEmailError(true)
-        }
-        if (password == '') {
-            setPasswordError(true)
-        }
-
-        if (email && password) {
-            console.log(email, password)
-        }
+    // Validation for course code and course title.
+    if (courseCode ==="" || courseTitle === "") {
+      setInvalidQuery(true);
     }
+    console.log(queryOptions);
 
-    return <>
-        <Container component="main" maxWidth="m">
-            <h2>Create Course</h2>
-            <div className={classes.paper}>
-                <form autoComplete="off" onSubmit={handleSubmit} className={classes.form}>
-                    <TextField
-                        label="Course Code"
-                        onChange={e => setCourseCode(e.target.value)}
-                        required
-                        autoFocus
-                        fullWidth
-                        variant="outlined"
-                        color="secondary"
-                        type="email"
+    // Define mysql localhost URL   
+    const URL = 'http://localhost:5000/admin';
 
-                        value={courseCode}
-                    />
-                    <Box sx={{ marginTop: '10px' }} />
-                    <TextField
-                        label="Course Title"
-                        onChange={e => setCourseTitle(e.target.value)}
-                        required
-                        variant="outlined"
-                        fullWidth
-                        color="secondary"
-                        type="password"
-                        value={courseTitle}
+    try {
+      const resp = await fetch(URL, queryOptions);
+      const data = await resp.json();
 
-                    />
-                    <Button variant="outlined" color="secondary" type="submit" classes={classes.userInputField}>Create Course</Button>
-                </form>
-            </div>
-        </Container>
-    </>
+      var columnHeadings = Object.keys(data[0]);
+      if (!('code' in columnHeadings)) {
+        setInvalidQuery(false);
+      }
+      else {
+      }
+
+    } catch (e) {
+
+      setInvalidQuery(true);
+      console.log(e);
+
+
+      console.log("INVALID QUERY WAS ENTERED");
+
+    }
+  };
+
+  return (
+    <Box component="main" sx={{ p: 7 }}>
+      <TextField
+        id="courseCode"
+        fullWidth
+        label="Enter Course Code"
+        variant="standard"
+        value={courseCode}
+        onChange={(e) => setCourseCode(e.target.value)}
+      />
+
+      <TextField
+        id="courseTitle"
+        fullWidth
+        label="Enter Course Title"
+        variant="standard"
+        value={courseTitle}
+        onChange={(e) => setCourseTitle(e.target.value)}
+      />
+
+      <br />
+      <br />
+      <Button variant="contained" onClick={resolveQuery}>
+        Create Course
+      </Button>
+
+      <br />
+      <br />
+
+      <Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); }}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Invalid Query. Please check and try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); }} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+    </Box>
+  );
 }
 
 export default CreateCourse;
