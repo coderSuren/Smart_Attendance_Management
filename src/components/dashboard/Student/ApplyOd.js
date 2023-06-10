@@ -4,7 +4,9 @@ import Box from '@mui/material/Box';
 import { makeStyles } from "@material-ui/core/styles";
 import Button from '@mui/material/Button';
 import { TextField } from '@material-ui/core';
-import Date from './Datepicker'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,7 +24,9 @@ function ApplyOD() {
         <div className={classes.root}>
         
         <Box component="main" sx={{ p: 4 }}>
-            <Date label="Enter Date"/>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker label="Enter Date" sx={{m:1,minWidth: 120,}} onChange={(date) => console.log(date)}/>
+            </LocalizationProvider>
             <TextField id="standard-basic" fullWidth label="Enter Course ID" variant="standard" />
             <TextField id="standard-basic" fullWidth label="Enter Period" variant="standard" />
             <br />
