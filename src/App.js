@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 // import 
-import Faculty from './components/dashboard/Faculty'
+import Faculty from './components/dashboard/Faculty/Faculty'
 import Login2fa from './components/login/Login2fa';
 import Student from './components/dashboard/Student/Student'
 import Login from './components/login/Login';
