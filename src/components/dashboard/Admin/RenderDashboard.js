@@ -10,6 +10,9 @@ import QueryDatabase from './QueryDatabase';
 import CreateClass from './CreateClass';
 import CreateAdmin from './CreateAdmin';
 import AssignStudentToClass from './AssignStudentToClass';
+import ViewStudents from './ViewStudents';
+import ViewFaculty from './ViewFaculty';
+import ViewCourses from './ViewCourses';
 
 // For reference. Already defined in Admin.js.
 // const viewDatabaseOptions = ['View Students', 'View Faculty', 'View Courses'];
@@ -21,30 +24,18 @@ function RenderDashboard(currentPage) {
   console.log(currentPage.currentPage);
   if (currentPage.currentPage === "View Students") {
     return <>
-      <Box component="main" sx={{ p: 3 }}>
-        <Typography>
-          View Students
-        </Typography>
-      </Box>
+     <ViewStudents/>
     </>
   }
   else if (currentPage.currentPage === "View Faculty") {
     return <>
-      <Box component="main" sx={{ p: 3 }}>
-        <Typography>
-          View Faculty
-        </Typography>
-      </Box>
+    <ViewFaculty/>
     </>
   }
 
   else if (currentPage.currentPage === "View Courses") {
     return <>
-      <Box component="main" sx={{ p: 3 }}>
-        <Typography>
-          View Courses
-        </Typography>
-      </Box>
+    <ViewCourses/>
     </>
   }
   else if (currentPage.currentPage === "Query Database") {

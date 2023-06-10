@@ -14,7 +14,7 @@ function App() {
   // const [enteredcode,setenteredCode]=useState();
   const [role,setrole] = useState("");
   const [isLogin2, setIsLogin2] = useState(false);
-  
+
     if(!isLogin){
       return (
         <Login setIsLogin={setIsLogin} setrole={setrole} setgeneratedCode={setgeneratedCode}/>

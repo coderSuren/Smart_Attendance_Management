@@ -85,7 +85,7 @@ suite(function (env) {
       console.log(button);
 
       await button.click();
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       await driver.wait(until.elementIsVisible(driver.findElement(By.id('code'))));
 
       // Enter the 2FA code that was auto-generated.
