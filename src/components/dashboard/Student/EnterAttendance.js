@@ -12,7 +12,7 @@ function EnterAttendance() {
             <TextField id="standard-basic" fullWidth label="Enter Attendance Code" variant="standard" />
             <br />
             <br />
-            <Button variant="contained">Enter Code </Button>
+            <Button variant="contained" id="entercode">Enter Code </Button>
         </Box>
     </>
     );
