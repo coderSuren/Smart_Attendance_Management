@@ -5,7 +5,7 @@ import ViewAttendance from './ViewAttendance';
 import EnterAttendance from './EnterAttendance';
 import ApplyOD from './ApplyOd';
 
-function RenderDashboard({currentPage}) {
+function RenderDashboard({currentPage,id}) {
 
   console.log(currentPage);
   if (currentPage === "View Attendance") {
@@ -15,7 +15,7 @@ function RenderDashboard({currentPage}) {
   }
   else if (currentPage === "Enter Attendance") {
     return <>
-      <EnterAttendance />
+      <EnterAttendance id={id}/>
     </>
   }
 

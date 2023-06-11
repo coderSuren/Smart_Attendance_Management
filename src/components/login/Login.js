@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
+const Login = ({setIsLogin,setrole,setgeneratedCode,setid}) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -81,6 +81,7 @@ const Login = ({setIsLogin,setrole,setgeneratedCode}) => {
         console.log(data[0].role)
         setrole(data[0].role)
         setgeneratedCode(data[2].code)
+        setid(data[0].email)
         
         
       }

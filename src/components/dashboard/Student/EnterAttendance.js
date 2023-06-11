@@ -7,12 +7,16 @@ import { TextField } from '@material-ui/core';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 
 
-function EnterAttendance() {
+function EnterAttendance({id}) {
     // const latitude = React.useState()
     const [longitude,setlongitude] = React.useState()
     const [latitude, setlatitude] = React.useState('');
     const [code, setCode] = React.useState('');
     const [error, setiserror] = React.useState(false);
+    const [updated, setUpdated] = React.useState(false);
+    const [failedupdation, setfailedupdation] = React.useState(false);
+    const [message,setmessage] = React.useState('');
+    const [backerror,setbackerror] = React.useState(false)
     
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const earthRadius = 6371; // Radius of the earth in kilometers
@@ -45,6 +49,9 @@ function EnterAttendance() {
         };
         function handleDialogClose(){
             setiserror(false)
+            setUpdated(false)
+            setfailedupdation(false)
+            setbackerror(false)
           }
       
     const printlocation = async (e) =>{ //main function
@@ -80,11 +87,42 @@ function EnterAttendance() {
         
         if (data[1].success){
             const distance = calculateDistance(data[0].teacher_latitude,data[0].teacher_longitude,latitude,longitude)
-            console.log("dISTANCE IS",distance)
-            if(distance<10){
+            console.log("dISTANCE IS",distance,typeof(distance))
+            if(distance<100000){
+                console.log(id)
+                const Query1 =`SELECT course_code, class_date
+                FROM Event
+                WHERE random_code= '${code}'`;;
+                const markoptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: Query1 ,email:id}),
+                    // mode: 'cors',
+                    };
+                const URL = 'http://localhost:5000/markattendance';
+                try{
+                    const response = await fetch(URL,markoptions);
+                    const data = await response.json();
+                    console.log(data,"hello");
+                    
+                    if(data[1].success){
+                        setUpdated(true);
+                        console.log("success")
+                    }
+                    else{
+                        setmessage(data[2].message)
+                        setbackerror(true)
+                        // console.log("failed")
+                    }
+                  }catch(e){
+                    console.log(e);
+            
+                  }
 
             }else{
-
+                setfailedupdation(true)
             }
             
         }
@@ -146,6 +184,47 @@ function EnterAttendance() {
         <DialogContent>
           <DialogContentText>
             Code does not match. Please try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={updated} onClose={handleDialogClose}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You have successfully submitted your Attendance
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={failedupdation} onClose={handleDialogClose}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You are more than 10 meters farther from the teacher's location.
+            If not, please tell your teacher to mark you present.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={backerror} onClose={handleDialogClose}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Updation failed!
+            {message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
