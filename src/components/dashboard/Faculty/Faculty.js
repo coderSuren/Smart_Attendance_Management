@@ -249,7 +249,7 @@ function Faculty() {
       
       return (
         <div>
-      <AppBar position="static">
+      <AppBar position="static" id="faculty-appbar">
   <Toolbar style={{ justifyContent: "space-between" }}>
     <Typography variant="h6" className={classes.title}>
       SMART ATTENDANCE SYSTEM
