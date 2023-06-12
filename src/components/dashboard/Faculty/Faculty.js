@@ -249,7 +249,7 @@ function Faculty() {
       
       return (
         <div>
-      <AppBar position="static">
+      <AppBar position="static" id="faculty-appbar">
   <Toolbar style={{ justifyContent: "space-between" }}>
     <Typography variant="h6" className={classes.title}>
       SMART ATTENDANCE SYSTEM
@@ -301,7 +301,7 @@ function Faculty() {
   <br></br><br></br>
   <div className={classes.captcha}> 
   <Grid container justifyContent="center">
-    <Button onClick={generateCaptcha} variant="outlined">Generate Captcha</Button>
+    <Button onClick={generateCaptcha} variant="outlined" id="generate-captcha">Generate Captcha</Button>
   </Grid>
   <Grid container justifyContent="center">
     <Typography id="captchaDisplay" className={classes.captchaText}>{captcha}</Typography>
@@ -318,7 +318,7 @@ function Faculty() {
     </Grid>
   </Grid>
 </div>
-  <Button className={classes.button} onClick={generateCode} variant="contained" color="primary" disabled={!isFormValid}>Generate Code</Button><br></br>
+  <Button className={classes.button} onClick={generateCode} variant="contained" color="primary" disabled={!isFormValid} id="generate-code-button">Generate Code</Button><br></br>
   <div className="code-display">
         <h2>Generated Code:</h2>
         <p>{codeDisplay}</p>
