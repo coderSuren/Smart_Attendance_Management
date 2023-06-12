@@ -15,6 +15,7 @@ import {
   Typography,
   Grid
 } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import "mapbox-gl/dist/mapbox-gl.css";
 import Map, {
   Marker,
@@ -25,6 +26,7 @@ import Map, {
 } from "react-map-gl";
 var latitude, longitude;
 var teacher_latitude, teacher_longitude;
+
 
 
 const localizer = momentLocalizer(moment);
@@ -94,7 +96,8 @@ function Faculty() {
   const [time,settime] = useState('')
   const [subject,setsubject] = useState('')
   const [enteredcaptcha,setenteredcaptcha] = useState()
-
+  const [invalidQuery, setInvalidQuery] = useState(false);
+  const [inserted, setinserted] = React.useState(false);
   function generateCaptcha() {
     const newCaptcha = generateRandomCaptcha();
     setCaptcha(newCaptcha);
@@ -171,8 +174,15 @@ function Faculty() {
 
       try {
         const resp = await fetch(URL, createEventQueryOptions);
-        // const data = await resp.json();
-        console.log(resp);
+        const data = await resp.json();
+        console.log(data);
+        if (data.affectedRows) {    
+            
+          setinserted(true);
+        }
+        else {
+          setInvalidQuery(true)
+        }
       } catch (e) {
         console.log(e);
       }
@@ -320,7 +330,7 @@ function Faculty() {
     </Grid>
   </Grid>
 </div> */}
-  <Button className={classes.button} onClick={storeCoordsInDatabase} variant="contained" color="primary" disabled={!isFormValid}>Save in database</Button><br></br>
+  <Button className={classes.button} onClick={storeCoordsInDatabase} variant="contained" color="primary" >Save in database</Button><br></br>
   {/* <div className="code-display">
         <h2>Generated Code:</h2>
         <p>{codeDisplay}</p>
@@ -342,7 +352,32 @@ function Faculty() {
     />  </div>
 </div>
 
-
+<Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please check and try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); }} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={inserted} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Entry stored in database. Students can give their attendance now.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); setinserted(false);}} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+        </Dialog>
 
 
       </div>
