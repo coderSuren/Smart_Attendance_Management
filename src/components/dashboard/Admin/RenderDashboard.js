@@ -7,7 +7,6 @@ import CreateStudent from './CreateStudent';
 import CreateCourse from './CreateCourse';
 import CreateFaculty from './CreateFaculty';
 import QueryDatabase from './QueryDatabase';
-import CreateClass from './CreateClass';
 import CreateAdmin from './CreateAdmin';
 import AssignStudentToClass from './AssignStudentToClass';
 
@@ -69,11 +68,11 @@ function RenderDashboard(currentPage) {
     </>
   }
 
-  else if (currentPage.currentPage === "Create Class") {
-    return <>
-      <CreateClass />
-    </>
-  }
+  // else if (currentPage.currentPage === "Create Class") {
+  //   return <>
+  //     <CreateClass />
+  //   </>
+  // }
   else if (currentPage.currentPage === "Assign student to class") {
     return <>
       <AssignStudentToClass />

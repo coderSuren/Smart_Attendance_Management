@@ -11,7 +11,7 @@ import { Form } from 'react-bootstrap';
 import { Link } from "react-router-dom"
 import { Stack, InputLabel, Select } from '@mui/material';
 import { makeStyles } from '@material-ui/core'
-
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(2),
@@ -50,23 +50,54 @@ function CreateStudent() {
     const [studentID, setStudentID] = React.useState('');
     const [specialization, setSpecialization] = React.useState('Default');
     const [semester, setSemester] = React.useState('Default');
+    const [invalidQuery, setInvalidQuery] = React.useState(false);
+    const [inserted, setinserted] = React.useState(false);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
         event.preventDefault()
 
-        setEmailError(false)
-        setPasswordError(false)
-
-        if (email == '') {
-            setEmailError(true)
-        }
-        if (password == '') {
-            setPasswordError(true)
-        }
-
-        if (email && password) {
-            console.log(email, password)
-        }
+        const queryOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            
+// -- VALUES ('S011', 'cb.en.u4cse20666@cb.students.amrita.edu', 'Tarun', 'R', 'password5', 'B',1,  'CSE');
+            body:JSON.stringify({query:`INSERT INTO Student (student_id, email, first_name, last_name, password, section, semester,specialization) VALUES ('${studentID}', '${email}', '${firstName}', '${lastName}', '${password}', '${section}','${semester}','${specialization}');`})
+          };
+      
+          // Validation for course code and course title.
+        //   if (courseCode ==="" || courseTitle === "") {
+        //     setInvalidQuery(true);
+        //   }
+          console.log(queryOptions);
+      
+          // Define mysql localhost URL   
+          const URL = 'http://localhost:5000/admin';
+      
+          try {
+            const resp = await fetch(URL, queryOptions);
+            const data = await resp.json();
+            console.log(data)
+            // var columnHeadings = Object.keys(data[0]);
+            // console.log(columnHeadings,"hguh")
+            if (data.affectedRows) {    
+            
+                setinserted(true);
+            }
+            else {
+                  setInvalidQuery(true);
+            }
+      
+          } catch (e) {
+      
+            // setInvalidQuery(true);
+            console.log(e);
+      
+      
+            console.log("INVALID QUERY WAS ENTERED");
+      
+          }
     }
 
     return <>
@@ -151,16 +182,16 @@ function CreateStudent() {
                             label="Select Section"
                         >
                             <MenuItem value="Default">
-                                <em>Select Semester</em>
+                                <em>Select Section</em>
                             </MenuItem>
-                            <MenuItem value="option1">'A'</MenuItem>
-                            <MenuItem value="option2">'B'</MenuItem>
-                            <MenuItem value="option3">'C'</MenuItem>
-                            <MenuItem value="option4">'D'</MenuItem>
-                            <MenuItem value="option5">'E'</MenuItem>
-                            <MenuItem value="option6">'F'</MenuItem>
-                            <MenuItem value="option7">'G'</MenuItem>
-                            <MenuItem value="option8">'H'</MenuItem>
+                            <MenuItem value="A">'A'</MenuItem>
+                            <MenuItem value="B">'B'</MenuItem>
+                            <MenuItem value="C">'C'</MenuItem>
+                            <MenuItem value="D">'D'</MenuItem>
+                            <MenuItem value="E">'E'</MenuItem>
+                            <MenuItem value="F">'F'</MenuItem>
+                            <MenuItem value="G">'G'</MenuItem>
+                            <MenuItem value="H">'H'</MenuItem>
                         </Select>
                                                 <Select
                             labelId="select-option-label"
@@ -174,14 +205,14 @@ function CreateStudent() {
                             <MenuItem value="Default">
                                 <em>Select Semester</em>
                             </MenuItem>
-                            <MenuItem value="option1">1</MenuItem>
-                            <MenuItem value="option2">2</MenuItem>
-                            <MenuItem value="option3">3</MenuItem>
-                            <MenuItem value="option4">4</MenuItem>
-                            <MenuItem value="option5">5</MenuItem>
-                            <MenuItem value="option6">6</MenuItem>
-                            <MenuItem value="option7">7</MenuItem>
-                            <MenuItem value="option8">8</MenuItem>
+                            <MenuItem value="1">1</MenuItem>
+                            <MenuItem value="2">2</MenuItem>
+                            <MenuItem value="3">3</MenuItem>
+                            <MenuItem value="4">4</MenuItem>
+                            <MenuItem value="5">5</MenuItem>
+                            <MenuItem value="6">6</MenuItem>
+                            <MenuItem value="7">7</MenuItem>
+                            <MenuItem value="8">8</MenuItem>
                         </Select>
                         <Select
                             labelId="select-option-label"
@@ -204,6 +235,32 @@ function CreateStudent() {
                 </form>
             </div>
         </Container>
+        <Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Invalid Query. Please check and try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); }} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={inserted} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Entry stored in database
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); setinserted(false);}} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
 
 }

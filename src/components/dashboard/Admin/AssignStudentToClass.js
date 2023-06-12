@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core'
-
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(2),
@@ -34,30 +34,62 @@ function AssignStudentToClass() {
     const classes = useStyles();
 
     const [email, setEmail] = React.useState('');
-    const [emailError, setEmailError] = React.useState(false)
+    
     const [password, setPassword] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false)
+    
     const [section, setSection] = React.useState('');
     const [studentID, setStudentID] = React.useState('');
     const [courseCode, setCourseCode] = React.useState('');
-    const [assignedTeacherID, setAssignedTeacherID] = React.useState('');
+    
+    const [invalidQuery, setInvalidQuery] = React.useState(false);
+    const [inserted, setinserted] = React.useState(false);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
         event.preventDefault()
 
-        setEmailError(false)
-        setPasswordError(false)
-
-        if (email == '') {
-            setEmailError(true)
-        }
-        if (password == '') {
-            setPasswordError(true)
-        }
-
-        if (email && password) {
-            console.log(email, password)
-        }
+        const queryOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            
+            
+            body:JSON.stringify({query:`INSERT INTO Class_Enrollment (course_code, section, student_id) VALUES ('${courseCode}', '${section}', '${studentID}');`})
+          };
+      
+          // Validation for course code and course title.
+        //   if (courseCode ==="" || courseTitle === "") {
+        //     setInvalidQuery(true);
+        //   }
+          console.log(queryOptions);
+      
+          // Define mysql localhost URL   
+          const URL = 'http://localhost:5000/admin';
+      
+          try {
+            const resp = await fetch(URL, queryOptions);
+            const data = await resp.json();
+            console.log(data)
+            // var columnHeadings = Object.keys(data[0]);
+            // console.log(columnHeadings,"hguh")
+            if (data.affectedRows) {    
+            
+                setinserted(true);
+            }
+            else {
+                  setInvalidQuery(true);
+            }
+      
+          } catch (e) {
+      
+            // setInvalidQuery(true);
+            console.log(e);
+      
+      
+            console.log("INVALID QUERY WAS ENTERED");
+      
+          }
+        
     }
 
     return <>
@@ -87,20 +119,7 @@ function AssignStudentToClass() {
                         color="secondary"
                         type="section"
                         value={section}
-                    />
-                    <Box sx={{ marginTop: '10px' }} />
-                    <TextField
-                        label="Assigned Teacher ID"
-                        onChange={e => setAssignedTeacherID(e.target.value)}
-                        required
-                        variant="outlined"
-                        color="secondary"
-                        type="AssignedTeacherID"
-                        value={assignedTeacherID}
-                        fullWidth
-
-                    />
-                    <Box sx={{ marginTop: '10px' }} />
+                    />  
                     <TextField
                         label="Student ID"
                         onChange={e => setStudentID(e.target.value)}
@@ -115,6 +134,32 @@ function AssignStudentToClass() {
                 </form>
             </div>
         </Container>
+        <Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Invalid Query. Please check and try again. Check your details properly!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); }} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={inserted} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Entry stored in database
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); setinserted(false);}} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+        </Dialog>
     </>
 }
 export default AssignStudentToClass;
