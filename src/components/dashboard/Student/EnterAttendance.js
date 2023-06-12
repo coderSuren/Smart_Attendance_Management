@@ -88,7 +88,7 @@ function EnterAttendance({id}) {
         if (data[1].success){
             const distance = calculateDistance(data[0].teacher_latitude,data[0].teacher_longitude,latitude,longitude)
             console.log("dISTANCE IS",distance,typeof(distance))
-            if(distance<100000){
+            if(distance<10){
                 console.log(id)
                 const Query1 =`SELECT course_code, class_date
                 FROM Event
