@@ -103,7 +103,7 @@ function Faculty() {
   function generateRandomCaptcha() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let captcha = "";
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 8; i++) {
       captcha += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return captcha;
@@ -157,7 +157,8 @@ function Faculty() {
       // This arrangement can be altered based on how we want the date's format to appear.
       let currentDate = `${year}-${month}-${day}`;  
       console.log(currentDate); // "17-6-2022"
-      const createEventQuery = `INSERT INTO Class_Schedule (course_code, class_date, num_hours, start_period, end_period) VALUES ("${subject}", DATE "${currentDate}", 1, 0, 2); INSERT INTO Event (event_id, course_code, class_date, random_code, teacher_latitude, teacher_longitude) VALUES (${maxEvent}, "${subject}", DATE "${currentDate}", "${captcha}", ${teacher_latitude}, ${teacher_longitude});`
+      const createEventQuery = `INSERT INTO Class_Schedule (course_code, class_date, num_hours, start_period, end_period) VALUES ("${subject}", DATE "${currentDate}", 1, 0, 2)`;
+      const createEventQuery1 = `INSERT INTO Event (event_id, course_code, class_date, random_code, teacher_latitude, teacher_longitude) VALUES (${maxEvent}, "${subject}", DATE "${currentDate}", "${captcha}", ${teacher_latitude}, ${teacher_longitude});`
                                                                                                                                                                                                                                                                   
       console.log(createEventQuery);
       var createEventQueryOptions = {
@@ -165,13 +166,13 @@ function Faculty() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: createEventQuery }),
+        body: JSON.stringify({ query: createEventQuery, query1: createEventQuery1 }),
       };
 
       try {
         const resp = await fetch(URL, createEventQueryOptions);
-        const data = await resp.json();
-        console.log(data);
+        // const data = await resp.json();
+        console.log(resp);
       } catch (e) {
         console.log(e);
       }
@@ -255,7 +256,7 @@ function Faculty() {
       SMART ATTENDANCE SYSTEM
     </Typography>
     <div>
-      <Button color="inherit">View Attendance</Button>
+      
       <Button color="inherit">Edit Attendance</Button>
       <Button color="inherit">Logout</Button>
     </div>
@@ -279,6 +280,7 @@ function Faculty() {
       <MenuItem value="19CSE311">19CSE311</MenuItem>
       <MenuItem value="19CSE312">19CSE312</MenuItem>
       <MenuItem value="19CSE313">19CSE313</MenuItem>
+      <MenuItem value="19CSE456">19CSE456</MenuItem>
     </Select>
   </FormControl></Grid></Grid></div>
   <br></br>
@@ -300,14 +302,14 @@ function Faculty() {
   </div>
   <br></br><br></br>
   <div className={classes.captcha}> 
-  <Grid container justifyContent="center">
-    <Button onClick={generateCaptcha} variant="outlined">Generate Captcha</Button>
+  <Grid container justifyContent="center">    
+    <Button onClick={generateCaptcha} variant="outlined">Generate Code</Button>
   </Grid>
   <Grid container justifyContent="center">
     <Typography id="captchaDisplay" className={classes.captchaText}>{captcha}</Typography>
   </Grid>
   </div>
-  <div className={classes.captcha}>
+  {/* <div className={classes.captcha}>
 
   <Grid container spacing={2} alignItems="center">
     <Grid item>
@@ -317,12 +319,13 @@ function Faculty() {
       <TextField id="captcha" label="Captcha"  required value={enteredcaptcha}  onChange={(e)=>{handleFormChange();setenteredcaptcha(e.target.value)}} />
     </Grid>
   </Grid>
-</div>
-  <Button className={classes.button} onClick={generateCode} variant="contained" color="primary" disabled={!isFormValid}>Generate Code</Button><br></br>
-  <div className="code-display">
+</div> */}
+  <Button className={classes.button} onClick={storeCoordsInDatabase} variant="contained" color="primary" disabled={!isFormValid}>Save in database</Button><br></br>
+  {/* <div className="code-display">
         <h2>Generated Code:</h2>
         <p>{codeDisplay}</p>
-      </div>  </form>
+      </div> */}
+        </form>
   
   <div style={{ flex: 5.5 }}>
     <AppBar style={{ position: "static" }} className={classes.appBar}>
