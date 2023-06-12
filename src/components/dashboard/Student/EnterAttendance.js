@@ -5,12 +5,22 @@ import Button from '@mui/material/Button';
 import { TextField } from '@material-ui/core';
 
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
-
-
+import "mapbox-gl/dist/mapbox-gl.css";
+import Map, {
+  Marker,
+  NavigationControl,
+  Popup,
+  FullscreenControl,
+  GeolocateControl,
+} from "react-map-gl";
+import { addConsoleHandler } from 'selenium-webdriver/lib/logging';
+var lat=  0, long = 0;
+var teacher_latitude = 0
+var  teacher_longitude = 0;
 function EnterAttendance({id}) {
     // const latitude = React.useState()
-    const [longitude,setlongitude] = React.useState()
-    const [latitude, setlatitude] = React.useState('');
+    const [longitude,setlongitude] = React.useState(long)
+    const [latitude, setlatitude] = React.useState(lat);
     const [code, setCode] = React.useState('');
     const [error, setiserror] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
@@ -18,6 +28,7 @@ function EnterAttendance({id}) {
     const [message,setmessage] = React.useState('');
     const [backerror,setbackerror] = React.useState(false)
     
+
     function calculateDistance(lat1, lon1, lat2, lon2) {
         const earthRadius = 6371; // Radius of the earth in kilometers
       
@@ -86,6 +97,9 @@ function EnterAttendance({id}) {
         console.log(data[0]);
         
         if (data[1].success){
+          teacher_latitude  = data[0].teacher_latitude;
+          teacher_longitude = data[0].teacher_longitude;
+          
             const distance = calculateDistance(data[0].teacher_latitude,data[0].teacher_longitude,latitude,longitude)
             console.log("dISTANCE IS",distance,typeof(distance))
             if(distance<10){
@@ -151,11 +165,23 @@ function EnterAttendance({id}) {
       .then(function(position){
           setlatitude(position.coords.latitude)
           setlongitude(position.coords.longitude)
-          console.log(position.coords.latitude, position.coords.longitude);
+          lat = position.coords.latitude;
+          long = position.coords.longitude;
 
-
-          
+          if (teacher_latitude == 0) {
+            teacher_latitude = lat;
+          }
+          if (teacher_longitude == 0) {
+            teacher_longitude = long;
+          }
+          console.log('Student')
+          console.log(lat, long);
+          console.log('Teacher')
+          console.log(teacher_latitude, teacher_longitude)
       })
+      .catch(function(error) {
+        console.log(error);
+      });
       
     //   getLocation()
     //     .then(function(position) {
@@ -179,6 +205,28 @@ function EnterAttendance({id}) {
             <br />
             <Button variant="contained" onClick={(e) => printlocation(e)}>Enter Code </Button>
         </Box>
+        <Map
+        mapboxAccessToken={process.env.REACT_APP_MAPBOX_API}
+        style={{
+          width: "100%",
+          height: "500px",
+          borderRadius: "15px",
+          border: "2px solid red",
+        }}
+        initialViewState={{
+          longitude: longitude,
+          latitude: latitude,
+          zoom: 18,
+        }}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+      >
+        <Marker longitude={longitude} latitude={latitude} />
+        <Marker longitude={teacher_longitude} latitude={teacher_latitude}  style={{ color: "red" }}/>
+        <NavigationControl position="bottom-right" />
+        <FullscreenControl />
+
+        <GeolocateControl />
+      </Map>
         <Dialog open={error} onClose={handleDialogClose}>
         <DialogTitle>Error</DialogTitle>
         <DialogContent>

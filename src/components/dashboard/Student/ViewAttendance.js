@@ -110,7 +110,7 @@ const Attendance =() =>
         body: JSON.stringify({ query: loginQuery}),
         // mode: 'cors',
         };
-    
+        console.log(loginQuery);
         // Define mysql localhost url
         const URL = 'http://localhost:5000/attendance';
         // console.log(loginRequestOptions)
@@ -124,12 +124,13 @@ const Attendance =() =>
           data.forEach((item) => {
             dates.push({'date':new Date(item.class_date),'attendance':item.attendance});
           });
-          setHighlightedDates(dates);         
+          setHighlightedDates(dates);   
+          console.log(data);      
 
         }
 
         } catch (e) {
-        // showError();
+            console.log("ERROR");
         }
     };
     useEffect(() => {
