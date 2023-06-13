@@ -117,7 +117,7 @@ function Faculty() {
 
 
     let day ='' + date.getDate();
-    let month ='' + (date.getMonth());
+    let month ='' + (date.getMonth() + 1);
     console.log(typeof(date.getMonth()));
     
     let year = date.getFullYear();
@@ -218,7 +218,7 @@ function Faculty() {
       console.log(date,"is date")
 
       let day ='' + date.getDate();
-      let month ='' + date.getMonth();
+      let month ='' + (date.getMonth()+1);
       
       let year = date.getFullYear();
 
