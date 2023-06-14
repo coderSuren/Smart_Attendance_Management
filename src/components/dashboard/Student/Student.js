@@ -17,7 +17,7 @@ import RenderDashboard from './RenderDashboard'
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 // var currentPage="";
-const Student = ({}) => {
+const Student = ({id}) => {
 
   const [isAttendanceEntrySelected, setAttendanceEntrySelected] = React.useState(null);
   const [isAttendanceViewSelected, setAttendanceViewSelected] = React.useState(null);
@@ -114,7 +114,7 @@ const Student = ({}) => {
         </Toolbar>
         </Container>
         </AppBar>
-        <RenderDashboard currentPage={currentPage}/>
+        <RenderDashboard currentPage={currentPage} id={id}/>
         </>
     );
 } 

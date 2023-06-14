@@ -15,6 +15,7 @@ import { Form } from 'react-bootstrap';
 import { Link } from "react-router-dom"
 import { Stack, InputLabel, Select } from '@mui/material';
 import { makeStyles } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -51,27 +52,56 @@ function CreateFaculty() {
     const [password, setPassword] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false)
     const [section, setSection] = React.useState('');
-    const [studentID, setStudentID] = React.useState('');
+    const [inserted, setinserted] = React.useState(false);
     const [teacherID, setTeacherID] = React.useState('');
-    const [course, setCourse] = React.useState('Default');
+    const [invalidQuery, setInvalidQuery] = React.useState(false);
     const [teacherRole, setTeacherRole] = React.useState('Default');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
         event.preventDefault()
 
-        setEmailError(false)
-        setPasswordError(false)
-
-        if (email == '') {
-            setEmailError(true)
-        }
-        if (password == '') {
-            setPasswordError(true)
-        }
-
-        if (email && password) {
-            console.log(email, password)
-        }
+        const queryOptions = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // body: JSON.stringify({ query: "INSERT INTO Course (course_code, course_title) VALUES (" + "'"
+            //  + courseCode + "', '" +  + courseTitle + "');"}),
+            body:JSON.stringify({query:`INSERT INTO Faculty (teacher_id, email, first_name, last_name, password, role) VALUES ('${teacherID}', '${email}', '${firstName}', '${lastName}', '${password}', '${teacherRole}');`})
+          };
+      
+          // Validation for course code and course title.
+        //   if (courseCode ==="" || courseTitle === "") {
+        //     setInvalidQuery(true);
+        //   }
+          console.log(queryOptions);
+      
+          // Define mysql localhost URL   
+          const URL = 'http://localhost:5000/admin';
+      
+          try {
+            const resp = await fetch(URL, queryOptions);
+            const data = await resp.json();
+            console.log(data)
+            // var columnHeadings = Object.keys(data[0]);
+            // console.log(columnHeadings,"hguh")
+            if (data.affectedRows) {    
+            
+                setinserted(true);
+            }
+            else {
+                  setInvalidQuery(true);
+            }
+      
+          } catch (e) {
+      
+            // setInvalidQuery(true);
+            console.log(e);
+      
+      
+            console.log("INVALID QUERY WAS ENTERED");
+      
+          }
     }
 
     return <>
@@ -157,14 +187,40 @@ function CreateFaculty() {
                         <MenuItem value="Default">
                             <em>Select Role</em>
                         </MenuItem>
-                        <MenuItem value="option1">Principal</MenuItem>
-                        <MenuItem value="option2">Assistent Professor</MenuItem>
-                        <MenuItem value="option3">Professor</MenuItem>
+                        <MenuItem value="Principal">Principal</MenuItem>
+                        <MenuItem value="Assistent Professor">Assistent Professor</MenuItem>
+                        <MenuItem value="Professor">Professor</MenuItem>
                     </Select>
                     <Button variant="outlined" color="secondary" type="submit" classes={classes.userInputField}>Create Account</Button>
                 </form>
             </div>
         </Container>
+        <Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Invalid Query. Please check and try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); }} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={inserted} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Entry stored in database
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); setinserted(false);}} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
 }
 

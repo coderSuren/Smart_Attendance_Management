@@ -15,16 +15,13 @@ import {
   Typography,
   Grid
 } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import "mapbox-gl/dist/mapbox-gl.css";
-import Map, {
-  Marker,
-  NavigationControl,
-  Popup,
-  FullscreenControl,
-  GeolocateControl,
-} from "react-map-gl";
-var latitude, longitude;
+import { saveAs } from 'file-saver';
+import Papa from 'papaparse';
+
 var teacher_latitude, teacher_longitude;
+
 
 
 const localizer = momentLocalizer(moment);
@@ -85,6 +82,7 @@ getLocation()
   });
 
 function Faculty() {
+  
   const classes = useStyles();
   const [captcha, setCaptcha] = useState('');
   const [code, setCode] = useState('');
@@ -94,7 +92,9 @@ function Faculty() {
   const [time,settime] = useState('')
   const [subject,setsubject] = useState('')
   const [enteredcaptcha,setenteredcaptcha] = useState()
-
+  const [invalidQuery, setInvalidQuery] = useState(false);
+  const [inserted, setinserted] = React.useState(false);
+  const [enablecsv, setenablecsv] = useState(false)
   function generateCaptcha() {
     const newCaptcha = generateRandomCaptcha();
     setCaptcha(newCaptcha);
@@ -103,14 +103,89 @@ function Faculty() {
   function generateRandomCaptcha() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let captcha = "";
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 8; i++) {
       captcha += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return captcha;
   }
 
+  //csv part
+  const handleDownloadCSV = async () => {
+    const downloadData = []; // Array to store the CSV data
+
+    const date = new Date();
+
+
+    let day ='' + date.getDate();
+    let month ='' + (date.getMonth() + 1);
+    console.log(typeof(date.getMonth()));
+    
+    let year = date.getFullYear();
+
+    if (day.length < 2) {
+      day = '0' + day;
+    }
+
+    if (month.length < 2) {
+      month = '0' + month;
+    }
+
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${year}-${month}-${day}`; 
+    const attendanceQuery = `SELECT course_code, class_date, student_id, attendance 
+    FROM Student_Attendance 
+    WHERE course_code = "${subject}" 
+    AND class_date = "${currentDate}"`;
+    console.log(attendanceQuery);
+
+    var attendanceQueryOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: attendanceQuery }),
+    };
+
+        try {
+        // Fetch the data from the database using an appropriate API endpoint
+        const response = await fetch('http://localhost:5000/admin', attendanceQueryOptions); // Replace API_ENDPOINT with the appropriate URL
+
+        if (response.ok) {
+          const data = await response.json();
+
+          console.log(data);
+          if (Array.isArray(data)) {
+            // Process the retrieved data and add it to the downloadData array
+            data.forEach((item) => {
+              downloadData.push({
+                course_code: item.course_code,
+                class_date: item.class_date,
+                student_id: item.student_id,
+              });
+            });
+
+            // Convert the downloadData array to CSV format using PapaParse
+            const csv = Papa.unparse(downloadData);
+
+            // Create a Blob object with the CSV data
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+
+            // Save the Blob as a file using FileSaver.js
+            saveAs(blob, 'attendance.csv');
+          } else {
+            console.log('Invalid data format. Expected an array.');
+          }
+        } else {
+          console.log('Failed to fetch data from the server.');
+        }
+      } catch (error) {
+        console.log('Error:', error);
+      }
+      };
+
   const storeCoordsInDatabase = async() => {
       // Get the next event ID.
+      
       var maxEvent = 0;
       const maxEventIdQuery = 'SELECT MAX(event_id) FROM Event';
       var maxEventIdQueryOptions = {
@@ -140,9 +215,10 @@ function Faculty() {
 
       // Get current date.
       const date = new Date();
+      console.log(date,"is date")
 
       let day ='' + date.getDate();
-      let month ='' + date.getMonth();
+      let month ='' + (date.getMonth()+1);
       
       let year = date.getFullYear();
 
@@ -157,7 +233,8 @@ function Faculty() {
       // This arrangement can be altered based on how we want the date's format to appear.
       let currentDate = `${year}-${month}-${day}`;  
       console.log(currentDate); // "17-6-2022"
-      const createEventQuery = `INSERT INTO Class_Schedule (course_code, class_date, num_hours, start_period, end_period) VALUES ("${subject}", DATE "${currentDate}", 1, 0, 2); INSERT INTO Event (event_id, course_code, class_date, random_code, teacher_latitude, teacher_longitude) VALUES (${maxEvent}, "${subject}", DATE "${currentDate}", "${captcha}", ${teacher_latitude}, ${teacher_longitude});`
+      const createEventQuery = `INSERT INTO Class_Schedule (course_code, class_date, num_hours, start_period, end_period) VALUES ("${subject}", DATE "${currentDate}", 1, 0, 2)`;
+      const createEventQuery1 = `INSERT INTO Event (event_id, course_code, class_date, random_code, teacher_latitude, teacher_longitude) VALUES (${maxEvent}, "${subject}", DATE "${currentDate}", "${captcha}", ${teacher_latitude}, ${teacher_longitude});`
                                                                                                                                                                                                                                                                   
       console.log(createEventQuery);
       var createEventQueryOptions = {
@@ -165,66 +242,28 @@ function Faculty() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: createEventQuery }),
+        body: JSON.stringify({ query: createEventQuery, query1: createEventQuery1 }),
       };
 
       try {
         const resp = await fetch(URL, createEventQueryOptions);
         const data = await resp.json();
         console.log(data);
+        if (data.affectedRows) {    
+            
+          setinserted(true);
+          setenablecsv(true);
+        }
+        else {
+          setInvalidQuery(true)
+        }
       } catch (e) {
         console.log(e);
       }
 
     }
 
-  function generateCode() {
-    console.log(subject);
-    console.log(time);
-    // console.log("sdfgkf")
-    console.log(enteredcaptcha)
-    console.log(isFormValid)
-    console.log(captcha)
-    if (isFormValid && (captcha === enteredcaptcha)) {
-      const subject1 = subject;
-      const timeSlot1 = time;
-      const startTime = moment(timeSlot1.split(" - ")[0], "H:mm")._i;
-      const endTime = moment(timeSlot1.split(" - ")[1], "H:mm")._i;
-      console.log(startTime)
-      console.log(endTime)
-      // Check if there are any events scheduled at the selected time slot
-      // const hasOverlappingEvents = events.some(event => {
-      //   const eventStartTime = moment(event.start);
-      //   const eventEndTime = moment(event.end);
-      //   console.log(eventStartTime)
-      //   console.log(eventEndTime)
-      //   //return (startTime.isBetween(eventStartTime, eventEndTime) || endTime.isBetween(eventStartTime, eventEndTime) || startTime.isSame(eventStartTime) || endTime.isSame(eventEndTime));
-      // });
-  
-      // if (hasOverlappingEvents) {
-      //   alert("There is already an event scheduled at the selected time slot!");
-      // } 
-      // else {
-        const newCode = generateRandomCode();
-        setCode(newCode);
-        setCodeDisplay(newCode);
-      
-        // Create a new event with the generated code, subject, and timeslot
-        const newEvent = {
-          title: `${subject1} - ${timeSlot1}`,
-          start: new Date(),
-          end: new Date(),
-        };
-        setEvents([...events, newEvent]); // Add the new event to the events state
-      // }
 
-      storeCoordsInDatabase();
-   
-    }
-     else {
-      alert("Please fill in the required fields and enter the correct captcha!");
-    }
-  }
   
   
 
@@ -238,7 +277,7 @@ function Faculty() {
       }
       
       function handleFormChange() {
-      // const subject = subject;
+
       const timeSlot = time;
       if (subject && timeSlot) {
       setIsFormValid(true);
@@ -255,7 +294,7 @@ function Faculty() {
       SMART ATTENDANCE SYSTEM
     </Typography>
     <div>
-      <Button color="inherit">View Attendance</Button>
+      
       <Button color="inherit">Edit Attendance</Button>
       <Button color="inherit">Logout</Button>
     </div>
@@ -279,6 +318,7 @@ function Faculty() {
       <MenuItem value="19CSE311">19CSE311</MenuItem>
       <MenuItem value="19CSE312">19CSE312</MenuItem>
       <MenuItem value="19CSE313">19CSE313</MenuItem>
+      <MenuItem value="19CSE456">19CSE456</MenuItem>
     </Select>
   </FormControl></Grid></Grid></div>
   <br></br>
@@ -300,29 +340,19 @@ function Faculty() {
   </div>
   <br></br><br></br>
   <div className={classes.captcha}> 
-  <Grid container justifyContent="center">
-    <Button onClick={generateCaptcha} variant="outlined" id="generate-captcha">Generate Captcha</Button>
+  <Grid container justifyContent="center">    
+    <Button onClick={generateCaptcha} variant="outlined">Generate Code</Button>
   </Grid>
   <Grid container justifyContent="center">
     <Typography id="captchaDisplay" className={classes.captchaText}>{captcha}</Typography>
   </Grid>
   </div>
-  <div className={classes.captcha}>
 
-  <Grid container spacing={2} alignItems="center">
-    <Grid item>
-      <Typography className={classes.captchaLabel}>Enter Captcha:</Typography>
-    </Grid>
-    <Grid item>
-      <TextField id="captcha" label="Captcha"  required value={enteredcaptcha}  onChange={(e)=>{handleFormChange();setenteredcaptcha(e.target.value)}} />
-    </Grid>
-  </Grid>
-</div>
-  <Button className={classes.button} onClick={generateCode} variant="contained" color="primary" disabled={!isFormValid} id="generate-code-button">Generate Code</Button><br></br>
-  <div className="code-display">
-        <h2>Generated Code:</h2>
-        <p>{codeDisplay}</p>
-      </div>  </form>
+  <Button className={classes.button} onClick={storeCoordsInDatabase} variant="contained" color="primary" >Save in database</Button><br></br>
+  {/* <Button onClick={handleDownloadCSV} ariant="contained" color="primary" >Download CSV</Button> */}
+  {enablecsv && <Button onClick={handleDownloadCSV} ariant="contained" color="primary" >Download CSV</Button>}
+        </form>
+
   
   <div style={{ flex: 5.5 }}>
     <AppBar style={{ position: "static" }} className={classes.appBar}>
@@ -339,7 +369,32 @@ function Faculty() {
     />  </div>
 </div>
 
-
+      <Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please check and try again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); }} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={inserted} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Entry stored in database. Students can give their attendance now.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); setinserted(false);}} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+        </Dialog>
 
 
       </div>

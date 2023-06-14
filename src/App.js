@@ -13,13 +13,14 @@ import Admin from './components/dashboard/Admin/Admin';
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [generatedcode,setgeneratedCode]=useState();
+  const [id,setid] = useState();
   // const [enteredcode,setenteredCode]=useState();
   const [role,setrole] = useState("");
   const [isLogin2, setIsLogin2] = useState(false);
 
     if(!isLogin){
       return (
-        <Login setIsLogin={setIsLogin} setrole={setrole} setgeneratedCode={setgeneratedCode}/>
+        <Login setIsLogin={setIsLogin} setrole={setrole} setgeneratedCode={setgeneratedCode} setid={setid}/>
       )
     }
     if(!isLogin2){
@@ -40,7 +41,7 @@ function App() {
       else if (role === "student"){
         console.log("jhif")
         return(
-          <Student />
+          <Student id={id}/>
         )
       }
 

@@ -17,17 +17,17 @@ function CreateCourse() {
   const [invalidQuery, setInvalidQuery] = useState(false);
   const [courseCode, setCourseCode] = useState('');
   const [courseTitle, setCourseTitle] = useState('');
-
+  const [inserted, setinserted] = React.useState(false);
   const resolveQuery = async () => {
+    console.log(courseTitle)
     const queryOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query: "INSERT INTO Course (course_code, course_title) VALUES (" + "'"
-       + courseCode + "', '" +  + courseTitle + "');"}),
+      body: JSON.stringify({ query: `INSERT INTO Course (course_code, course_title) VALUES ('${courseCode}', '${courseTitle}');`}),
     };
-
+    console.log(queryOptions)
     // Validation for course code and course title.
     if (courseCode ==="" || courseTitle === "") {
       setInvalidQuery(true);
@@ -40,12 +40,14 @@ function CreateCourse() {
     try {
       const resp = await fetch(URL, queryOptions);
       const data = await resp.json();
-
-      var columnHeadings = Object.keys(data[0]);
-      if (!('code' in columnHeadings)) {
-        setInvalidQuery(false);
-      }
+      // console.log(data)
+      // var columnHeadings = Object.keys(data[0]);
+      if (data.affectedRows) {    
+            
+        setinserted(true);
+    }
       else {
+        setInvalidQuery(true)
       }
 
     } catch (e) {
@@ -88,7 +90,7 @@ function CreateCourse() {
       <br />
       <br />
 
-      <Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); }}>
+      <Dialog open={invalidQuery} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
         <DialogTitle>Error</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -101,6 +103,19 @@ function CreateCourse() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog open={inserted} onClose={() => { setInvalidQuery(false); setinserted(false); }}>
+        <DialogTitle>Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Entry stored in database
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setInvalidQuery(false); setinserted(false);}} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+        </Dialog>
 
     </Box>
   );

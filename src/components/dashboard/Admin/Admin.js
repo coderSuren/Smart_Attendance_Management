@@ -16,7 +16,7 @@ import RenderDashboard from './RenderDashboard'
 const navbarPages = ['View Database', 'Create Entry', 'Query Database'];
 const viewDatabaseOptions = ['View Students', 'View Faculty', 'View Courses'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const createDatabaseEntryOptions = ['Create Student', 'Create Course', 'Create Faculty', 'Create Class', 'Create Admin', 'Assign student to class'];
+const createDatabaseEntryOptions = ['Create Student', 'Create Course', 'Create Faculty', 'Create Admin', 'Assign student to class'];
 const advancedOptions = ['Query Database'];
 
 var currentPage = navbarPages[0];
