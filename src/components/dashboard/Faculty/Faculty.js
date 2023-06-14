@@ -288,7 +288,7 @@ function Faculty() {
       
       return (
         <div>
-      <AppBar position="static">
+      <AppBar position="static" id="faculty-appbar">
   <Toolbar style={{ justifyContent: "space-between" }}>
     <Typography variant="h6" className={classes.title}>
       SMART ATTENDANCE SYSTEM
@@ -352,6 +352,7 @@ function Faculty() {
   {/* <Button onClick={handleDownloadCSV} ariant="contained" color="primary" >Download CSV</Button> */}
   {enablecsv && <Button onClick={handleDownloadCSV} ariant="contained" color="primary" >Download CSV</Button>}
         </form>
+
   
   <div style={{ flex: 5.5 }}>
     <AppBar style={{ position: "static" }} className={classes.appBar}>

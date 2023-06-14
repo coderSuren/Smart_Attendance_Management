@@ -55,10 +55,10 @@ suite(function (env) {
         const CheckQuery = async (query, isQueryInvalid) => {
             let invalidQueryField = await driver.findElements(By.id('queryField'));
             if (isQueryInvalid) {
-                assert(invalidQueryField.length == 0);
+                assert(invalidQueryField.length != 0);
             }
             else {
-                assert(invalidQueryField.length != 0);
+                assert(invalidQueryField.length == 0);
             }
         };
 
@@ -70,15 +70,20 @@ suite(function (env) {
 
             // Go the query database page.
             let advancedOptionsButton = await driver.findElement(By.id('advanced'));
+            console.log("Found advanced option button");
             console.log(advancedOptionsButton);
             await advancedOptionsButton.click();
-            await new Promise((resolve) => setTimeout(resolve, 1000000));
+            
+            await driver.wait(until.elementIsVisible(driver.findElement(By.id('query-database'))));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            let button = await driver.findElement(By.id('Query Database'));
+            let button = await driver.findElement(By.id('query-database'));
             await button.click();
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             await CheckQuery('SELECT * FROM Student', false);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await CheckQuery('SELdfsdfECT * FROM Studentsfsdfsdfasdfasdfasdf', false);
         });
     });
 }, { browsers: [Browser.CHROME] });

@@ -57,6 +57,7 @@ const Student = ({id}) => {
                 setAttendanceEntrySelected(event.currentTarget);
                 console.log(currentPage)}} 
                 sx={{ my: 2, color: 'white !important', display: 'flex' }}
+                id="enter-attendance"
               >
                 Enter Attendance
               </Button>

@@ -113,7 +113,7 @@ function Admin() {
               </Button>
               <Menu
                 sx={{ mt: '45px' }}
-                id="menu-appbar"
+                id="query-database"
                 anchorEl={isDatabaseQuerySelected}
                 anchorOrigin={{
                   vertical: 'top',

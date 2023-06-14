@@ -203,7 +203,9 @@ function EnterAttendance({id}) {
             <TextField id="standard-basic" fullWidth label="Enter Attendance Code" variant="standard" onChange={(e) => setCode(e.target.value)} value={code}/>
             <br />
             <br />
+
             <Button variant="contained" onClick={(e) => printlocation(e)}>Enter Code </Button>
+
         </Box>
         <Map
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_API}
